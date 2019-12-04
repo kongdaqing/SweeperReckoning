@@ -29,9 +29,23 @@ struct GroundTruthType{
     }
     Eigen::Vector3d pos;
     Eigen::Quaterniond q;
+    Eigen::Vector3d euler;
     double time_s;
 };
-
+void ReadSimulationData(ifstream& imu_file,IMUType& imu,GroundTruthType& gt)
+{
+  double time_s,qw,qx,qy,qz,px,py,pz,wx,wy,wz,ax,ay,az,roll,pitch,yaw;
+  imu_file >> time_s >> qw >> qx >> qy >> qz >> px >> py >> pz >> wx
+           >> wy >> wz >> ax >> ay >> az >> roll >> pitch >> yaw;
+  imu.time_s = time_s;
+  imu.acc << ax,ay,az;
+  imu.gyro << wx,wy,wz;
+  gt.time_s = imu.time_s;
+  gt.q = Eigen::Quaterniond(qw,qx,qy,qz);
+  gt.euler << roll,pitch,yaw;
+  cout << "[Main]: " << time_s << endl; 
+ 
+}
 
 
 void ReadEurocData(ifstream& imu_fin,ifstream& gt_fin,IMUType& imu,GroundTruthType& gt)
@@ -73,7 +87,12 @@ void ReadEurocData(ifstream& imu_fin,ifstream& gt_fin,IMUType& imu,GroundTruthTy
        }
    }
    gt.q = Eigen::Quaterniond(q[0],q[1],q[2],q[3]);
+
+
 }
+
+
+
 
 
 int main(int argc,char **argv)
@@ -118,8 +137,12 @@ int main(int argc,char **argv)
    {
         IMUType eurocIMU;
         GroundTruthType eurocGT;
-        ReadEurocData(imu_fin,gt_fin,eurocIMU,eurocGT);
+        //ReadEurocData(imu_fin,gt_fin,eurocIMU,eurocGT);
+        ReadSimulationData(imu_fin,eurocIMU,eurocGT);
         cout << "[Main]:" << eurocIMU.time_s << " " << eurocIMU.gyro.transpose() << " " << eurocIMU.acc.transpose() << "  " << eurocIMU.gyro.norm()*RAD2DEG << endl;
+        attEstimator.EstimateAttitude(eurocIMU.acc,eurocIMU.gyro,eurocIMU.time_s);
+        cout << "[Main]:Groudtr attitude angle roll-pitch-yaw ：" << eurocGT.euler[0]*RAD2DEG << ", " << eurocGT.euler[1]*RAD2DEG << ", " << eurocGT.euler[2]*RAD2DEG << endl;
+       /*
         if(!attEstimator.initialSuccessFlg)
         {
             attEstimator.InitializeEstimator(eurocIMU.acc,eurocIMU.gyro);
@@ -128,7 +151,7 @@ int main(int argc,char **argv)
             {
                 attEstimator.EstimateAttitude(eurocIMU.acc,eurocIMU.gyro,eurocIMU.time_s);
             }
-        }
+        }*/
         chrono::milliseconds dura(intervalTime_ms);
         this_thread::sleep_for(dura);
    }

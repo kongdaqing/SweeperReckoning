@@ -9,7 +9,7 @@ find_package(Eigen3)
 include_directories(
   ${EIGEN3_INCLUDE_DIR}
 )
-find_package(Ceres REQUIRED)
+#find_package(Ceres REQUIRED)
 find_package(OpenCV REQUIRED)
 
 
@@ -21,4 +21,4 @@ add_executable(robotReckoning src/main.cpp
     src/Sensor/odometry.cpp
     src/Utility/lowPassFilter.cpp)
 
-target_link_libraries(robotReckoning ${CERES_LIBRARIES} ${OpenCV_LIBS})
+target_link_libraries(robotReckoning  ${OpenCV_LIBS})
