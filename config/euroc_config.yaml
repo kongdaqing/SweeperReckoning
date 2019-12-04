@@ -1,0 +1,16 @@
+%YAML:1.0
+
+
+acc_T_calibr: !!opencv-matrix
+   rows: 4
+   cols: 4
+   dt: d
+   data: [1.0, 0.0, 0.0, 0.0,
+         0.0, 1.0, 0.0, 0.0,
+         0.0, 0.0, 1.0, 0.0,
+         0.0, 0.0, 0.0, 1.0]
+imu_freqency : 200
+
+data_path: "/home/zx/workspace/Anker_Project/SweeperReckoning/data/euroc/MH3/imu/data.csv"
+ground_true_path : "/home/zx/workspace/Anker_Project/SweeperReckoning/data/euroc/MH3/ground_truth/data.csv"
+save_att: "/home/zx/workspace/Anker_Project/SweeperReckoning/output/euroc/att.csv"
