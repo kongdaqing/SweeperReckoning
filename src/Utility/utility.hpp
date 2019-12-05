@@ -1,6 +1,6 @@
 #pragma once
 #include <Eigen/Dense>
-
+#define pi 3.1415926
 class Utility
 {
 public:
@@ -51,8 +51,22 @@ public:
         roll = atan2(2 * (q2*q3 + q0*q1), q0*q0 - q1*q1 - q2*q2 + q3*q3);
         pitch = asin(2 * (q0*q2 - q1*q3));
         yaw = atan2(2 * (q1*q2 + q0*q3), q0*q0 + q1*q1 - q2*q2 - q3*q3);
+        if(yaw > pi)
+            yaw = yaw - 2*pi;
+        if(yaw < -pi)
+            yaw = yaw + 2*pi;
         Eigen::Vector3d euler(roll,pitch,yaw);
         return euler;
+    }
+    static Eigen::Vector3d Acc2TiltAngle(Eigen::Vector3d& acc)
+    {
+        Eigen::Vector3d Euler;
+        Eigen::Vector3d normlizedAcc = acc/acc.norm();
+        
+        Euler.setZero();
+        Euler[0] = atan2(normlizedAcc.y(),normlizedAcc.z());
+        Euler[1] = asin(-normlizedAcc.x());
+        return Euler;
     }
 
 

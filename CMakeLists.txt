@@ -15,10 +15,19 @@ find_package(OpenCV REQUIRED)
 
 include_directories()
 
-add_executable(robotReckoning src/main.cpp
+add_executable(testReckoning src/test.cpp
     src/Fusion/mahonyAttEstimator.cpp
     src/Sensor/imu.cpp
     src/Sensor/odometry.cpp
     src/Utility/lowPassFilter.cpp)
 
-target_link_libraries(robotReckoning  ${OpenCV_LIBS})
+target_link_libraries(testReckoning  ${OpenCV_LIBS})
+
+add_executable(ankerReckoning src/AnkerInterface.cpp
+    src/Fusion/mahonyAttEstimator.cpp
+    src/Sensor/imu.cpp
+    src/Sensor/odometry.cpp
+    src/Utility/lowPassFilter.cpp
+    src/Anker/readAnkerDataFile.cpp)
+
+target_link_libraries(ankerReckoning  ${OpenCV_LIBS})

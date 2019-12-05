@@ -12,8 +12,15 @@ acc_T_calibr: !!opencv-matrix
 imu_freqency : 200
 
 #data_path: "/home/zx/workspace/Anker_Project/SweeperReckoning/data/euroc/MH3/imu/data.csv"
-data_path: "/Users/kongdaqing/Desktop/workspace/project/SLAM/SweeperReckoning/data/simulation/kdq_imu_pose.txt"
-#ground_true_path : "/home/zx/workspace/Anker_Project/SweeperReckoning/data/euroc/MH3/ground_truth/data.csv"
-ground_true_path: "/Users/kongdaqing/Desktop/workspace/project/SLAM/SweeperReckoning/data/euroc/MH3/ground_truth/data.csv"
+ground_true_path : "/home/zx/workspace/Anker_Project/SweeperReckoning/data/euroc/MH3/ground_truth/data.csv"
 #save_att: "/home/zx/workspace/Anker_Project/SweeperReckoning/output/euroc/att.csv"
-save_att : "/Users/kongdaqing/Desktop/workspace/project/SLAM/SweeperReckoning/output/simulation/att.csv"
+#save_t_att: "/home/zx/workspace/Anker_Project/SweeperReckoning/output/euroc/refatt.csv"
+data_path: "/home/zx/workspace/Anker_Project/SweeperReckoning/data/simulation/kdq_imu_pose_noise.txt"
+save_att: "/home/zx/workspace/Anker_Project/SweeperReckoning/output/simulation/att.csv"
+save_t_att: "/home/zx/workspace/Anker_Project/SweeperReckoning/output/simulation/refatt.csv"
+#ground_true_path: "/Users/kongdaqing/Desktop/workspace/project/SLAM/SweeperReckoning/data/euroc/MH3/ground_truth/data.csv"
+#save_att : "/Users/kongdaqing/Desktop/workspace/project/SLAM/SweeperReckoning/output/simulation/att.csv"
+
+#data_path: "/home/zx/workspace/Anker_Project/SweeperReckoning/data/simulation/kdq_imu_pose_noise.txt"
+#ground_true_path : "/home/zx/workspace/Anker_Project/SweeperReckoning/data/euroc/MH3/ground_truth/data.csv"
+#save_att: "/home/zx/workspace/Anker_Project/SweeperReckoning/output/euroc/att.csv"

@@ -1,0 +1,15 @@
+subplot(3,1,1);
+plot(att.t,att.roll,'r',att.t,att.aroll,'b');
+hold on;
+plot(refatt.t,refatt.roll,'g');
+grid on;
+subplot(3,1,2);
+plot(att.t,att.pitch,'r',att.t,att.apitch,'b');
+hold on;
+plot(refatt.t,refatt.pitch,'g');
+grid on;
+subplot(3,1,3);
+plot(att.t,att.yaw,'r');
+hold on;
+plot(refatt.t,refatt.yaw,'g');
+grid on;

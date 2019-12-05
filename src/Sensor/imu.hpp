@@ -6,6 +6,18 @@
 
 #define G 9.7936
 
+
+struct IMUType{
+    IMUType(){
+        acc.setZero();
+        gyro.setZero();
+        time_s = 0;
+    }
+    Eigen::Vector3d acc;
+    Eigen::Vector3d gyro;
+    double time_s;
+};
+
 class IMU
 {
 public:

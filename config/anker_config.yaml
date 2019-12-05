@@ -29,7 +29,9 @@ acc_T_calibr: !!opencv-matrix
           0.00130701,1.00342,-0.0024619,0.0223509,
           0.00314038,0.00247981,0.996171,-0.209035,
           0., 0., 0., 1. ]
-
+data_path: "/home/zx/workspace/Anker_Project/SweeperReckoning/data/anker/1/"
+save_att: "/home/zx/workspace/Anker_Project/SweeperReckoning/output/anker/att.csv"
+imu_freqency : 250
 
 body_T_cam0: !!opencv-matrix
    rows: 4
