@@ -1,0 +1,15 @@
+plot(pose2D.x,pose2D.y,'--k',pose2D.x_i,pose2D.y_i,'r');
+legend('Odom','IMU');
+start.x = pose2D.x(1);
+start.y = pose2D.y(1);
+end_odom.x = pose2D.x(length(pose2D.x));
+end_odom.y = pose2D.y(length(pose2D.y));
+end_imu.x = pose2D.x_i(length(pose2D.x_i));
+end_imu.y = pose2D.y_i(length(pose2D.y_i));
+hold on;
+scatter(start.x,start.y,'g');
+hold on;
+scatter(end_odom.x,end_odom.y,'k');
+hold on;
+scatter(end_imu.x,end_imu.y,'r');
+grid on;
