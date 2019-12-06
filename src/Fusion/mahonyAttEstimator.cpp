@@ -4,7 +4,8 @@ MahonyAttEstimator::MahonyAttEstimator(string _ConfigFile)
 {
     imu = new IMU(_ConfigFile);
     cv::FileStorage fsSetting(_ConfigFile,cv::FileStorage::READ);
-    string recordPath = fsSetting["save_att"];
+    string recordPath = fsSetting["data_path"];
+    recordPath = recordPath + "output/attitude.csv";
     recordFile.open(recordPath);
     recordFile << "t" << "," << "roll" << "," << "pitch" << "," << "yaw" << "," << "aroll" << "," << "apitch" << ","
                << "ax" << "," << "ay" << "," << "az" << "," << "lax" << ","  << "lay" << "," << "laz" <<  endl;
@@ -96,7 +97,6 @@ bool MahonyAttEstimator::InitializeAttitude(Eigen::Vector3d &_Acc)
         Utility::Euler2Quadnion(initalEuler,q);
         euler = Utility::Quaternion2EulerAngles(q);
         printf("[Estimator]: Intialization Success!Theta = %f, Phi = %f \n",initalEuler[0]*RAD2DEG,initalEuler[1]*RAD2DEG);
-        printf("[Estimator]: Intialization Success!Theta = %f, Phi = %f \n",euler[0]*RAD2DEG,euler[1]*RAD2DEG);
     }
     return  true;
 }
@@ -106,7 +106,6 @@ void MahonyAttEstimator::EstimateAttitude(IMUType&_RawIMU)
     Eigen::Vector3d resAcc = imu->GetCalibrAccData(_RawIMU.acc);
     Eigen::Vector3d resGyro = imu->GetCalibrGyroData(_RawIMU.gyro);
     double time_s = _RawIMU.time_s;
-
     if(last_time < 0)
     {
         last_time = time_s;
@@ -114,15 +113,12 @@ void MahonyAttEstimator::EstimateAttitude(IMUType&_RawIMU)
         lastGyro = resGyro;
         return;
     }
-
     double delta_time_s = time_s - last_time;
     last_time = time_s;
     double halfT = 0.5*delta_time_s;
-
     Eigen::Vector3d lpfAcc,lpfGyro;
     lpfAcc = accLPF.apply(resAcc,delta_time_s);
     lpfGyro = gyrLPF.apply(resGyro,delta_time_s);
-
     if(delta_time_s <= 0)
     {
         printf("[Estimator]:Timestamp sequence is not right,please check timestamp!!!\n");
@@ -145,7 +141,6 @@ void MahonyAttEstimator::EstimateAttitude(IMUType&_RawIMU)
         }
         return;
     }
-
     Eigen::Vector3d midAcc = 0.5*(lastAcc + lpfAcc);
     Eigen::Vector3d midGyr = 0.5*(lastGyro + lpfGyro);
     lastAcc = lpfAcc;

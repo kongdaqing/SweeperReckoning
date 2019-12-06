@@ -4,6 +4,7 @@
 #include "../Sensor/imu.hpp"
 #include "../Utility/lowPassFilter.hpp"
 #include "../Utility/utility.hpp"
+#include "../Sensor/sensorType.hpp"
 #include <opencv2/opencv.hpp>
 #include <fstream>
 #define STEADY_GYRO_MINIRATE 10
@@ -26,9 +27,7 @@ public:
     void InitializeEstimator(IMUType&_RawIMU);
     bool InitializeAttitude(Eigen::Vector3d& _Acc);
     void EstimateAttitude(IMUType&_RawIMU);
-    void SetAttitude(Eigen::Vector3d& _euler);
-    void SetInitialAttitude(Eigen::Vector3d& _euler);
-    void SetQuadnion(Eigen::Quaterniond &_quad);
+    IMU *imu;
     struct EstState{
         EstState()
         {
@@ -43,8 +42,10 @@ public:
     bool GetEstimatorState(){return estimatorState.SuccessFlg;};
     bool initialSuccessFlg;
     const Eigen::Quaterniond GetAttQuadnion(){return  q;};
+    void SetQuadnion(Eigen::Quaterniond &_quad);
+
 private:
-IMU *imu;
+
 Eigen::Vector3d initalEuler;
 Eigen::Quaterniond q;
 Eigen::Vector3d euler;
@@ -56,6 +57,10 @@ Eigen::Vector3d errInt;
 ofstream recordFile;
 Eigen::Vector3d lastAcc;
 Eigen::Vector3d lastGyro;
+//KDQ: Not allow to use unless special condition.
+void SetAttitude(Eigen::Vector3d& _euler);
+void SetInitialAttitude(Eigen::Vector3d& _euler);
+
 };
 
 
