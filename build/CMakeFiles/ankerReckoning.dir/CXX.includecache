@@ -8,10 +8,6 @@
 
 /home/zx/workspace/Anker_Project/SweeperReckoning/src/Anker/ankerDataType.h
 
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Anker/readAnkerDataFile.cpp
-readAnkerDataFile.h
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Anker/readAnkerDataFile.h
-
 /home/zx/workspace/Anker_Project/SweeperReckoning/src/Anker/readAnkerDataFile.h
 ankerDataType.h
 /home/zx/workspace/Anker_Project/SweeperReckoning/src/Anker/ankerDataType.h
@@ -45,10 +41,8 @@ thread
 -
 Anker/readAnkerDataFile.h
 /home/zx/workspace/Anker_Project/SweeperReckoning/src/Anker/readAnkerDataFile.h
-
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Fusion/mahonyAttEstimator.cpp
-mahonyAttEstimator.hpp
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Fusion/mahonyAttEstimator.hpp
+Sensor/odometry.hpp
+/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/odometry.hpp
 
 /home/zx/workspace/Anker_Project/SweeperReckoning/src/Fusion/mahonyAttEstimator.hpp
 ../Sensor/imu.hpp
@@ -57,14 +51,12 @@ mahonyAttEstimator.hpp
 /home/zx/workspace/Anker_Project/SweeperReckoning/src/Utility/lowPassFilter.hpp
 ../Utility/utility.hpp
 /home/zx/workspace/Anker_Project/SweeperReckoning/src/Utility/utility.hpp
+../Sensor/sensorType.hpp
+/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/sensorType.hpp
 opencv2/opencv.hpp
 -
 fstream
 -
-
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/imu.cpp
-imu.hpp
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/imu.hpp
 
 /home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/imu.hpp
 Eigen/Dense
@@ -74,13 +66,21 @@ opencv2/opencv.hpp
 opencv2/core/eigen.hpp
 -
 
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/odometry.cpp
+/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/odometry.hpp
+../Transform/Transform.hpp
+/home/zx/workspace/Anker_Project/SweeperReckoning/src/Transform/Transform.hpp
+sensorType.hpp
+/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/sensorType.hpp
+fstream
+-
 
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Utility/lowPassFilter.cpp
-lowPassFilter.hpp
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Utility/lowPassFilter.hpp
-utility.hpp
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Utility/utility.hpp
+/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/sensorType.hpp
+Eigen/Dense
+-
+
+/home/zx/workspace/Anker_Project/SweeperReckoning/src/Transform/Transform.hpp
+Eigen/Dense
+-
 
 /home/zx/workspace/Anker_Project/SweeperReckoning/src/Utility/lowPassFilter.hpp
 Eigen/Dense
