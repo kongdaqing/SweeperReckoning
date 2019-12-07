@@ -109,9 +109,22 @@ CMakeFiles/ankerReckoning.dir/src/Sensor/odometry.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ankerReckoning.dir/src/Sensor/odometry.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/odometry.cpp -o CMakeFiles/ankerReckoning.dir/src/Sensor/odometry.cpp.s
 
+CMakeFiles/ankerReckoning.dir/src/Sensor/optFlow.cpp.o: CMakeFiles/ankerReckoning.dir/flags.make
+CMakeFiles/ankerReckoning.dir/src/Sensor/optFlow.cpp.o: ../src/Sensor/optFlow.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zx/workspace/Anker_Project/SweeperReckoning/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ankerReckoning.dir/src/Sensor/optFlow.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ankerReckoning.dir/src/Sensor/optFlow.cpp.o -c /home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/optFlow.cpp
+
+CMakeFiles/ankerReckoning.dir/src/Sensor/optFlow.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ankerReckoning.dir/src/Sensor/optFlow.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/optFlow.cpp > CMakeFiles/ankerReckoning.dir/src/Sensor/optFlow.cpp.i
+
+CMakeFiles/ankerReckoning.dir/src/Sensor/optFlow.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ankerReckoning.dir/src/Sensor/optFlow.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/optFlow.cpp -o CMakeFiles/ankerReckoning.dir/src/Sensor/optFlow.cpp.s
+
 CMakeFiles/ankerReckoning.dir/src/Utility/lowPassFilter.cpp.o: CMakeFiles/ankerReckoning.dir/flags.make
 CMakeFiles/ankerReckoning.dir/src/Utility/lowPassFilter.cpp.o: ../src/Utility/lowPassFilter.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zx/workspace/Anker_Project/SweeperReckoning/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ankerReckoning.dir/src/Utility/lowPassFilter.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zx/workspace/Anker_Project/SweeperReckoning/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ankerReckoning.dir/src/Utility/lowPassFilter.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ankerReckoning.dir/src/Utility/lowPassFilter.cpp.o -c /home/zx/workspace/Anker_Project/SweeperReckoning/src/Utility/lowPassFilter.cpp
 
 CMakeFiles/ankerReckoning.dir/src/Utility/lowPassFilter.cpp.i: cmake_force
@@ -124,7 +137,7 @@ CMakeFiles/ankerReckoning.dir/src/Utility/lowPassFilter.cpp.s: cmake_force
 
 CMakeFiles/ankerReckoning.dir/src/Anker/readAnkerDataFile.cpp.o: CMakeFiles/ankerReckoning.dir/flags.make
 CMakeFiles/ankerReckoning.dir/src/Anker/readAnkerDataFile.cpp.o: ../src/Anker/readAnkerDataFile.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zx/workspace/Anker_Project/SweeperReckoning/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ankerReckoning.dir/src/Anker/readAnkerDataFile.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zx/workspace/Anker_Project/SweeperReckoning/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ankerReckoning.dir/src/Anker/readAnkerDataFile.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ankerReckoning.dir/src/Anker/readAnkerDataFile.cpp.o -c /home/zx/workspace/Anker_Project/SweeperReckoning/src/Anker/readAnkerDataFile.cpp
 
 CMakeFiles/ankerReckoning.dir/src/Anker/readAnkerDataFile.cpp.i: cmake_force
@@ -141,6 +154,7 @@ ankerReckoning_OBJECTS = \
 "CMakeFiles/ankerReckoning.dir/src/Fusion/mahonyAttEstimator.cpp.o" \
 "CMakeFiles/ankerReckoning.dir/src/Sensor/imu.cpp.o" \
 "CMakeFiles/ankerReckoning.dir/src/Sensor/odometry.cpp.o" \
+"CMakeFiles/ankerReckoning.dir/src/Sensor/optFlow.cpp.o" \
 "CMakeFiles/ankerReckoning.dir/src/Utility/lowPassFilter.cpp.o" \
 "CMakeFiles/ankerReckoning.dir/src/Anker/readAnkerDataFile.cpp.o"
 
@@ -151,6 +165,7 @@ ankerReckoning: CMakeFiles/ankerReckoning.dir/src/AnkerInterface.cpp.o
 ankerReckoning: CMakeFiles/ankerReckoning.dir/src/Fusion/mahonyAttEstimator.cpp.o
 ankerReckoning: CMakeFiles/ankerReckoning.dir/src/Sensor/imu.cpp.o
 ankerReckoning: CMakeFiles/ankerReckoning.dir/src/Sensor/odometry.cpp.o
+ankerReckoning: CMakeFiles/ankerReckoning.dir/src/Sensor/optFlow.cpp.o
 ankerReckoning: CMakeFiles/ankerReckoning.dir/src/Utility/lowPassFilter.cpp.o
 ankerReckoning: CMakeFiles/ankerReckoning.dir/src/Anker/readAnkerDataFile.cpp.o
 ankerReckoning: CMakeFiles/ankerReckoning.dir/build.make
@@ -200,7 +215,7 @@ ankerReckoning: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_objdetect3.so.3.
 ankerReckoning: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_imgproc3.so.3.3.1
 ankerReckoning: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_core3.so.3.3.1
 ankerReckoning: CMakeFiles/ankerReckoning.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/zx/workspace/Anker_Project/SweeperReckoning/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable ankerReckoning"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/zx/workspace/Anker_Project/SweeperReckoning/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable ankerReckoning"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ankerReckoning.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

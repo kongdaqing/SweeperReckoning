@@ -6,43 +6,21 @@
 
 #IncludeRegexTransform: 
 
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Fusion/mahonyAttEstimator.cpp
-mahonyAttEstimator.hpp
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Fusion/mahonyAttEstimator.hpp
-
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Fusion/mahonyAttEstimator.hpp
-../Sensor/imu.hpp
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/imu.hpp
-../Utility/lowPassFilter.hpp
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Utility/lowPassFilter.hpp
+/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/optFlow.cpp
+optFlow.hpp
+/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/optFlow.hpp
+opencv2/opencv.hpp
+-
 ../Utility/utility.hpp
 /home/zx/workspace/Anker_Project/SweeperReckoning/src/Utility/utility.hpp
-../Sensor/sensorType.hpp
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/sensorType.hpp
-opencv2/opencv.hpp
--
-fstream
--
-
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/imu.hpp
-Eigen/Dense
--
-opencv2/opencv.hpp
--
 opencv2/core/eigen.hpp
 -
 
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/odometry.cpp
-odometry.hpp
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/odometry.hpp
-opencv2/opencv.hpp
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/opencv2/opencv.hpp
-
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/odometry.hpp
-../Transform/Transform.hpp
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Transform/Transform.hpp
+/home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/optFlow.hpp
 sensorType.hpp
 /home/zx/workspace/Anker_Project/SweeperReckoning/src/Sensor/sensorType.hpp
+../Transform/Transform.hpp
+/home/zx/workspace/Anker_Project/SweeperReckoning/src/Transform/Transform.hpp
 fstream
 -
 
@@ -51,10 +29,6 @@ Eigen/Dense
 -
 
 /home/zx/workspace/Anker_Project/SweeperReckoning/src/Transform/Transform.hpp
-Eigen/Dense
--
-
-/home/zx/workspace/Anker_Project/SweeperReckoning/src/Utility/lowPassFilter.hpp
 Eigen/Dense
 -
 

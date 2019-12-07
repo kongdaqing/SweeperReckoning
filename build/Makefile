@@ -280,6 +280,36 @@ src/Sensor/odometry.cpp.s:
 	$(MAKE) -f CMakeFiles/ankerReckoning.dir/build.make CMakeFiles/ankerReckoning.dir/src/Sensor/odometry.cpp.s
 .PHONY : src/Sensor/odometry.cpp.s
 
+src/Sensor/optFlow.o: src/Sensor/optFlow.cpp.o
+
+.PHONY : src/Sensor/optFlow.o
+
+# target to build an object file
+src/Sensor/optFlow.cpp.o:
+	$(MAKE) -f CMakeFiles/testReckoning.dir/build.make CMakeFiles/testReckoning.dir/src/Sensor/optFlow.cpp.o
+	$(MAKE) -f CMakeFiles/ankerReckoning.dir/build.make CMakeFiles/ankerReckoning.dir/src/Sensor/optFlow.cpp.o
+.PHONY : src/Sensor/optFlow.cpp.o
+
+src/Sensor/optFlow.i: src/Sensor/optFlow.cpp.i
+
+.PHONY : src/Sensor/optFlow.i
+
+# target to preprocess a source file
+src/Sensor/optFlow.cpp.i:
+	$(MAKE) -f CMakeFiles/testReckoning.dir/build.make CMakeFiles/testReckoning.dir/src/Sensor/optFlow.cpp.i
+	$(MAKE) -f CMakeFiles/ankerReckoning.dir/build.make CMakeFiles/ankerReckoning.dir/src/Sensor/optFlow.cpp.i
+.PHONY : src/Sensor/optFlow.cpp.i
+
+src/Sensor/optFlow.s: src/Sensor/optFlow.cpp.s
+
+.PHONY : src/Sensor/optFlow.s
+
+# target to generate assembly for a file
+src/Sensor/optFlow.cpp.s:
+	$(MAKE) -f CMakeFiles/testReckoning.dir/build.make CMakeFiles/testReckoning.dir/src/Sensor/optFlow.cpp.s
+	$(MAKE) -f CMakeFiles/ankerReckoning.dir/build.make CMakeFiles/ankerReckoning.dir/src/Sensor/optFlow.cpp.s
+.PHONY : src/Sensor/optFlow.cpp.s
+
 src/Utility/lowPassFilter.o: src/Utility/lowPassFilter.cpp.o
 
 .PHONY : src/Utility/lowPassFilter.o
@@ -362,6 +392,9 @@ help:
 	@echo "... src/Sensor/odometry.o"
 	@echo "... src/Sensor/odometry.i"
 	@echo "... src/Sensor/odometry.s"
+	@echo "... src/Sensor/optFlow.o"
+	@echo "... src/Sensor/optFlow.i"
+	@echo "... src/Sensor/optFlow.s"
 	@echo "... src/Utility/lowPassFilter.o"
 	@echo "... src/Utility/lowPassFilter.i"
 	@echo "... src/Utility/lowPassFilter.s"
