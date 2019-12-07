@@ -8,9 +8,10 @@
 #include <thread>
 #include "Anker/readAnkerDataFile.h"
 #include "Sensor/odometry.hpp"
+#include "Sensor/optFlow.hpp"
 using namespace std;
 
-void ExtractAnkerData(AnkerData& _ankerData,IMUType& _imuData,OdometryType& _odomData)
+void ExtractAnkerData(AnkerData& _ankerData,IMUType& _imuData,OdometryType& _odomData,OptFlowType& _optData)
 {
     _imuData.time_s = _ankerData.time;
     _imuData.acc = Eigen::Vector3d(_ankerData.ax,_ankerData.ay,_ankerData.az);
@@ -20,6 +21,11 @@ void ExtractAnkerData(AnkerData& _ankerData,IMUType& _imuData,OdometryType& _odo
     _odomData.rightPos = _ankerData.odo_right_pos;
     _odomData.leftVelocity = _ankerData.odo_left_vel;
     _odomData.rightVelocity = _ankerData.odo_right_vel;
+    _optData.time_s = _ankerData.time;
+    _optData.optSumX = _ankerData.opt_pos_x;
+    _optData.optSumY = _ankerData.opt_pos_y;
+    _optData.optFigIq = _ankerData.opt_quality;
+
 }
 
 
@@ -38,13 +44,12 @@ int main(int argc,char **argv)
         std::cerr << "ERROR: Wrong path to settings" << std::endl;
     }
     string  dataPath =  fsSettings["data_path"];
-    string imu_file = dataPath +  "imu_file.cvs";
-    string odo_file = dataPath + "odometer_file.cvs";
-    string opt_file = dataPath + "optical_flow_file.cvs";
+
     double imu_freq = fsSettings["imu_freqency"];
-    ReadAnkerDataFile AnkerDatas(imu_file,odo_file,opt_file);
+    ReadAnkerDataFile AnkerDatas(dataPath);
     MahonyAttEstimator attEstimator(configFile);
     Odometry odomEstimator(configFile);
+    OptFlow optEstimator(configFile);
 
     unsigned int intervalTime_ms = 1000/( unsigned int)imu_freq;
 
@@ -54,25 +59,34 @@ int main(int argc,char **argv)
         AnkerDatas.AnkerDataSet.pop();
         IMUType imuData;
         OdometryType odomData;
-        ExtractAnkerData(ankerData,imuData,odomData);
+        OptFlowType optData;
+        ExtractAnkerData(ankerData,imuData,odomData,optData);
         if(!attEstimator.initialSuccessFlg)
         {
             attEstimator.InitializeEstimator(imuData);
         }else {
             Eigen::Vector3d Rate_b = attEstimator.imu->GetCalibrGyroData(imuData.gyro);
+            imuData.gyro = Rate_b;
             if(attEstimator.GetEstimatorState())
             {
                 attEstimator.EstimateAttitude(imuData);
+                if(optEstimator.GetOptflowEstimatorState())
+                {
+                  optEstimator.DeadReckoningUpdate(optData,imuData);
+                }
                 if(odomEstimator.GetDeadReckoningState())
                 {
                   Eigen::Quaterniond Quad_b2w = attEstimator.GetAttQuadnion();
                   Eigen::Vector3d Rate_w = Quad_b2w * Rate_b;
-                  odomEstimator.DeadReckoningUpdate(odomData,Rate_b.z());
+                  imuData.gyro = Rate_w;
+                  odomEstimator.DeadReckoningUpdate(odomData,imuData);
                 }
+
             }else {
               if(odomEstimator.GetDeadReckoningState())
               {
-                odomEstimator.DeadReckoningUpdate(odomData,Rate_b.z());
+                imuData.gyro = Rate_b;
+                odomEstimator.DeadReckoningUpdate(odomData,imuData);
               }
             }
             chrono::milliseconds dura(intervalTime_ms);

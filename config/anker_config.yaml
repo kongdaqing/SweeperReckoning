@@ -14,4 +14,14 @@ acc_T_calibr: !!opencv-matrix
 odom_freqency: 250
 odom_baseline: 0.209
 
+
+
+opt_T_odom: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: d
+   data: [0.983945902559416,-0.024543804521931,0.101,
+          0.024543804521931,0.983945902559416,-0.087,
+          0. , 0. , 1.]
+opt_freqency: 250
 data_path: "/home/zx/workspace/Anker_Project/SweeperReckoning/data/anker/4/"

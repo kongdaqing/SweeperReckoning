@@ -16,7 +16,7 @@ public:
     y = 0;
     theta = 0;
   }
-  void SetTransform(Transform2D& _t)
+  void SetTransform(const Transform2D& _t)
   {
       x = _t.x;
       y = _t.y;

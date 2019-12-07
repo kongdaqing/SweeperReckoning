@@ -19,6 +19,7 @@ add_executable(testReckoning src/test.cpp
     src/Fusion/mahonyAttEstimator.cpp
     src/Sensor/imu.cpp
     src/Sensor/odometry.cpp
+    src/Sensor/optFlow.cpp
     src/Utility/lowPassFilter.cpp)
 
 target_link_libraries(testReckoning  ${OpenCV_LIBS})
@@ -27,6 +28,7 @@ add_executable(ankerReckoning src/AnkerInterface.cpp
     src/Fusion/mahonyAttEstimator.cpp
     src/Sensor/imu.cpp
     src/Sensor/odometry.cpp
+    src/Sensor/optFlow.cpp
     src/Utility/lowPassFilter.cpp
     src/Anker/readAnkerDataFile.cpp)
 
