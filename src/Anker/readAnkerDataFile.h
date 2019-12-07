@@ -12,10 +12,11 @@ using namespace std;
 class ReadAnkerDataFile
 {
 public:
-    ReadAnkerDataFile(const string& imu_file,const string& odometry_file,const string& optical_file);
+    ReadAnkerDataFile(string dataPath);
     queue<AnkerData> AnkerDataSet;
 private:
     bool type_is_int;
+    ofstream recordData;
 };
 
 #endif // READANKERDATAFILE_H

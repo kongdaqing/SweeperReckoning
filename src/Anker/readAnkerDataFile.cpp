@@ -1,7 +1,15 @@
 #include "readAnkerDataFile.h"
 
-ReadAnkerDataFile::ReadAnkerDataFile(const string& imu_file,const string& odometry_file,const string& optical_file)
+ReadAnkerDataFile::ReadAnkerDataFile(string dataPath)
 {
+  string imu_file = dataPath +  "imu_file.cvs";
+  string odo_file = dataPath + "odometer_file.cvs";
+  string opt_file = dataPath + "optical_flow_file.cvs";
+  string save_file = dataPath + "output/ankerData.csv";
+  recordData.open(save_file);
+  recordData << "time_s" << "," << "ax" << "," <<"ay" << "," <<"az" << "," <<"gx" << "," <<"gy" << "," << "gz" << ","
+             << "odo_rvel" << "," << "odo_lvel" << "," << "odo_rpos" << "," << "odo_lpos" << "," << "opt_sumx" << "," << "opt_sumy" << endl;
+
 
   ifstream imu_fin(imu_file.c_str());
   if(!imu_fin)
@@ -9,16 +17,16 @@ ReadAnkerDataFile::ReadAnkerDataFile(const string& imu_file,const string& odomet
     printf("File %s doesn't exist!",imu_file.c_str());
     return;
   }
-  ifstream odo_fin(odometry_file.c_str());
+  ifstream odo_fin(odo_file.c_str());
   if(!odo_fin)
   {
-    printf("File %s doesn't exist!",odometry_file.c_str());
+    printf("File %s doesn't exist!",odo_file.c_str());
     return;
   }
-  ifstream opt_fin(optical_file.c_str());
+  ifstream opt_fin(opt_file.c_str());
   if(!opt_fin)
   {
-    printf("File %s doesn't exist!",optical_file.c_str());
+    printf("File %s doesn't exist!",opt_file.c_str());
     return;
   }
   printf("NOW!Load anker sensor from files!");
@@ -58,6 +66,12 @@ ReadAnkerDataFile::ReadAnkerDataFile(const string& imu_file,const string& odomet
     opt_fin >> raw_data.wall_distance_left;
     opt_fin >> raw_data.opt_quality;
 
+    //transform opt -> odom
+    // x -> -y
+    // y -> -x
+    double tmp = raw_data.opt_pos_x;
+    raw_data.opt_pos_x = -raw_data.opt_pos_y;
+    raw_data.opt_pos_y = -tmp;
 
     raw_data.ax *= ACC_Resolution;
     raw_data.ay *= ACC_Resolution;
@@ -72,9 +86,11 @@ ReadAnkerDataFile::ReadAnkerDataFile(const string& imu_file,const string& odomet
     raw_data.odo_left_vel *= ODO_Resolution;
     raw_data.opt_pos_x *= OPT_Resolution;
     raw_data.opt_pos_y *= OPT_Resolution;
-
+    recordData << raw_data.time << "," << raw_data.ax << ","  << raw_data.ay << "," << raw_data.az << "," << raw_data.gx << "," << raw_data.gy << "," << raw_data.gz << ","
+               << raw_data.odo_right_vel << "," << raw_data.odo_left_vel << "," << raw_data.odo_right_pos << "," << raw_data.odo_left_pos << "," << raw_data.opt_pos_x << "," << raw_data.opt_pos_y << endl;
     AnkerDataSet.push(raw_data);
   }
+  recordData.close();
   printf("Finish loading!");
   printf("Load anker sensor datas size: %ld",AnkerDataSet.size());
 }
