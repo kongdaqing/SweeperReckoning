@@ -33,12 +33,12 @@ const Transform2D  Odometry::GetTransform2D()
 {
   return T;
 }
-void Odometry::SetTransform(Transform2D &_T)
+void Odometry::SetTransform(const Transform2D &_T)
 {
   T.SetTransform(_T);
 }
 
-void Odometry::InitializeDeadReckoning(OdometryType &_odoData)
+void Odometry::InitializeDeadReckoning(const OdometryType &_odoData)
 {
   if(fabs(_odoData.leftVelocity) > 1e-6 || fabs(_odoData.rightVelocity) > 1e-6)
   {
@@ -52,7 +52,7 @@ void Odometry::InitializeDeadReckoning(OdometryType &_odoData)
   T_imu.setZero();
 }
 
-void Odometry::DeadReckoningUpdate(OdometryType &_odoData,double _imuRate_z)
+void Odometry::DeadReckoningUpdate(const OdometryType &_odoData,const IMUType& _imuData)
 {
   if(!initialFlg)
   {
@@ -61,6 +61,7 @@ void Odometry::DeadReckoningUpdate(OdometryType &_odoData,double _imuRate_z)
   }
   double dT = _odoData.time_s - lastTime_s;
   lastTime_s = _odoData.time_s;
+
   if(dT < 0)
   {
     badTimestampCount++;
@@ -73,7 +74,9 @@ void Odometry::DeadReckoningUpdate(OdometryType &_odoData,double _imuRate_z)
     printf("[Odometry]:Timestamp interval is too big,please input right timestamp!\n");
     return;
   }
-  if(badTimestampCount > 100)
+
+  double dAlignTime = _odoData.time_s - _imuData.time_s;
+  if(badTimestampCount > 100 || fabs(dAlignTime) > 1./freq)
   {
     goodStateFlg = false;
     return;
@@ -86,7 +89,7 @@ void Odometry::DeadReckoningUpdate(OdometryType &_odoData,double _imuRate_z)
 
   T_imu.x += dPos * cos(T_imu.theta);
   T_imu.y += dPos * sin(T_imu.theta);
-  T_imu.UpdateTheta(_imuRate_z*dT);
+  T_imu.UpdateTheta(_imuData.gyro.z()*dT);
   //printf("[Odometry]:Timestamp is %f, odom data %f %f\n",_odoData.time_s,_odoData.rightVelocity,_odoData.leftVelocity);
   printf("[Odometry]:Dead Rockoning x,y,theta is %f,%f,%f\n",T.x,T.y,T.theta*RAD2DEG);
   printf("[Odometry]:IMU DRockoning x,y,theta is %f,%f,%f\n",T_imu.x,T_imu.y,T_imu.theta*RAD2DEG);

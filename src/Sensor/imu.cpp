@@ -23,14 +23,14 @@ IMU::IMU(std::string yamlFile)
   freq = fsSettings["imu_freqency"];
   std::cout << "IMU Freqency: " << freq << std::endl;
 }
-Eigen::Vector3d IMU::GetCalibrAccData(Eigen::Vector3d &rawAcc)
+Eigen::Vector3d IMU::GetCalibrAccData(const Eigen::Vector3d &rawAcc)
 {
     Eigen::Vector3d res;
     res = accM * (rawAcc + accBias) - randomAccBias;
     return res;
 }
 
-Eigen::Vector3d IMU::GetCalibrGyroData(Eigen::Vector3d &rawGyro)
+Eigen::Vector3d IMU::GetCalibrGyroData(const Eigen::Vector3d &rawGyro)
 {
     Eigen::Vector3d res;
     res = gyrM * (rawGyro + gyrBias) - randomGyroBias;
@@ -38,13 +38,13 @@ Eigen::Vector3d IMU::GetCalibrGyroData(Eigen::Vector3d &rawGyro)
 }
 
 
-void IMU::SetCalibrRandomAccBias(Eigen::Vector3d &randAccBias)
+void IMU::SetCalibrRandomAccBias(const Eigen::Vector3d &randAccBias)
 {
     randomAccBias = randAccBias;
     printf("[IMU]:Set random acc bias = %f %f %f\n",randomAccBias[0],randomAccBias[1],randomAccBias[2]);
 }
 
-void IMU::SetCalibrRandomGyroBias(Eigen::Vector3d &randGyrBias)
+void IMU::SetCalibrRandomGyroBias(const Eigen::Vector3d &randGyrBias)
 {
     randomGyroBias = randGyrBias;
     printf("[IMU]:Set random gyro bias = %f %f %f\n",randomGyroBias[0],randomGyroBias[1],randomGyroBias[2]);

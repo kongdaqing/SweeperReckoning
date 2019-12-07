@@ -4,7 +4,6 @@
 #include "sensorType.hpp"
 #include <fstream>
 using namespace std;
-#define RAD2DEG 57.29578
 
 
 
@@ -14,9 +13,9 @@ class Odometry
 public:
     Odometry(string _configFile);
     ~Odometry();
-    void InitializeDeadReckoning(OdometryType& _odoData);
-    void DeadReckoningUpdate(OdometryType& _odoData,double _imuRate_z);
-    void SetTransform(Transform2D& _T);
+    void InitializeDeadReckoning(const OdometryType& _odoData);
+    void DeadReckoningUpdate(const OdometryType& _odoData,const IMUType& _imuData);
+    void SetTransform(const Transform2D& _T);
     const Transform2D GetTransform2D();
     bool GetDeadReckoningState(){return  goodStateFlg;}
 private:

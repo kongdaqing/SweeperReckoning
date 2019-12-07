@@ -2,6 +2,25 @@
 #define SENSORTYPE_H
 #include <Eigen/Dense>
 
+#define RAD2DEG 57.29578
+
+
+struct OptFlowType
+{
+    OptFlowType()
+    {
+        time_s = 0;
+        optSumX = 0;
+        optSumY = 0;
+        optFigIq = 0;
+    }
+    double time_s;
+    double optSumX;
+    double optSumY;
+    unsigned short int optFigIq;
+
+};
+
 
 struct IMUType{
     IMUType(){
