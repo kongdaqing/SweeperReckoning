@@ -2,14 +2,14 @@ function plotOpt2Odom(ankerData,begin_index,end_index)
 %PLOTOPT2ODOM 此处显示有关此函数的摘要
 %   此处显示详细说明
 
-disx = 0.087;
-disy = 0.101;
+disx = 0.086837;% 0.083872;%0.087;
+disy = 0.098038;%0.095403;%0.101;
 T = [0.983945902559416 -0.024543804521931 disy;
      0.024543804521931 0.983945902559416 -disx] 
 R = sqrt(disx*disx + disy*disy);
 phi = atan2(disy,disx);
-theta = 0.024939090492672;
-m = 1/1.016;
+theta = 0.022660;%0.022596;%0.024939090492672;
+m = 0.987607;%0.987868;%1/1.016;
 opt_sumx = ankerData.opt_sumx(begin_index:end_index);
 opt_sumy = ankerData.opt_sumy(begin_index:end_index);
 odom_lpos = ankerData.odo_lpos(begin_index:end_index);
@@ -48,8 +48,8 @@ for i = 2:len
    dopt2odo_x = dopt2odo1_x - dBiasx;
    dopt2odo_y = dopt2odo1_y - dBiasy;
    
-   opt2odom_posx(i) = opt2odom_posx(i-1) + dodom(1);%dopt2odo_x;
-   opt2odom_posy(i) = opt2odom_posy(i-1) + dodom(2);%dopt2odo_y;
+   opt2odom_posx(i) = opt2odom_posx(i-1) + dopt2odo_x;
+   opt2odom_posy(i) = opt2odom_posy(i-1) + dopt2odo_y;
    
    dodom_l = odom_lpos(i) - odom_lpos(i-1);
    dodom_r = odom_rpos(i) - odom_rpos(i-1);
