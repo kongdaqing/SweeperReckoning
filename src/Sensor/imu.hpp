@@ -17,6 +17,7 @@ public:
     Eigen::Vector3d GetCalibrGyroData(const Eigen::Vector3d& rawGyro);
     void SetCalibrRandomGyroBias(const Eigen::Vector3d& randGyrBias);
     void SetCalibrRandomAccBias(const Eigen::Vector3d& randAccBias);
+    void SetGravity(double _gravity);
     double freq;
 private:
 Eigen::Vector3d accBias;
@@ -25,6 +26,7 @@ Eigen::Vector3d gyrBias;
 Eigen::Matrix3d gyrM;
 Eigen::Vector3d randomAccBias;
 Eigen::Vector3d randomGyroBias;
+double gravity;
 };
 
 

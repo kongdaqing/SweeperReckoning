@@ -8,6 +8,7 @@ IMU::IMU(std::string yamlFile)
   gyrBias.setZero();
   randomAccBias.setZero();
   randomGyroBias.setZero();
+  gravity = G;
   cv::FileStorage fsSettings(yamlFile, cv::FileStorage::READ);
   if(!fsSettings.isOpened())
   {
@@ -48,4 +49,9 @@ void IMU::SetCalibrRandomGyroBias(const Eigen::Vector3d &randGyrBias)
 {
     randomGyroBias = randGyrBias;
     printf("[IMU]:Set random gyro bias = %f %f %f\n",randomGyroBias[0],randomGyroBias[1],randomGyroBias[2]);
+}
+
+void IMU::SetGravity(double _gravity)
+{
+    gravity = _gravity;
 }
