@@ -53,8 +53,8 @@ void OptFlow::DeadReckoningUpdate(const OptFlowType &_opt, const IMUType &_imu)
   }
   Eigen::Vector3d dpos = TransformOpt2Odom(_opt,_imu);
   lastData = _opt;
-  T_opt.x += dpos[0] * cos(T_opt.theta);
-  T_opt.y += dpos[0] * sin(T_opt.theta);
+  T_opt.x += dpos[0] * cos(T_opt.theta) - dpos[1] * sin(T_opt.theta);
+  T_opt.y += dpos[0] * sin(T_opt.theta) + dpos[1] * cos(T_opt.theta);
   T_opt.UpdateTheta(dpos[2]);
   printf("[Optflow]:Timestamp %f pose is %f,%f,%f\n",_opt.time_s,T_opt.x,T_opt.y,T_opt.theta*RAD2DEG);
   recordFile << _opt.time_s << "," << dpos[0] << "," << dpos[1] << "," << T_opt.x << "," << T_opt.y << "," << T_opt.theta << endl;
