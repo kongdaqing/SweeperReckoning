@@ -1,4 +1,0 @@
-/home/zx/workspace/Anker_Project/SweeperReckoning/build/CMakeFiles/rebuild_cache.dir
-/home/zx/workspace/Anker_Project/SweeperReckoning/build/CMakeFiles/edit_cache.dir
-/home/zx/workspace/Anker_Project/SweeperReckoning/build/CMakeFiles/testReckoning.dir
-/home/zx/workspace/Anker_Project/SweeperReckoning/build/CMakeFiles/ankerReckoning.dir

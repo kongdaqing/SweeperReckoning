@@ -44,14 +44,16 @@ int main(int argc,char **argv)
         std::cerr << "ERROR: Wrong path to settings" << std::endl;
     }
     string  dataPath =  fsSettings["data_path"];
-
     double imu_freq = fsSettings["imu_freqency"];
+    double fastSkew = fsSettings["speed_skew"];
+    if(fastSkew < 1)
+      fastSkew = 1;
     ReadAnkerDataFile AnkerDatas(dataPath);
     MahonyAttEstimator attEstimator(configFile);
     Odometry odomEstimator(configFile);
     OptFlow optEstimator(configFile);
 
-    unsigned int intervalTime_ms = 1000/( unsigned int)imu_freq;
+    unsigned int intervalTime_ms = 1000/( unsigned int)(imu_freq * fastSkew);
 
     while(AnkerDatas.AnkerDataSet.size() > 1)
     {
