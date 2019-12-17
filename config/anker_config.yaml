@@ -1,6 +1,7 @@
 %YAML:1.0
 
-imu_freqency : 250
+speed_skew: 10
+imu_freqency : 125
 acc_T_calibr: !!opencv-matrix
    rows: 4
    cols: 4
@@ -11,7 +12,7 @@ acc_T_calibr: !!opencv-matrix
           0., 0., 0., 1. ]
 
 
-odom_freqency: 250
+odom_freqency: 125
 odom_baseline: 0.209
 
 
@@ -23,5 +24,9 @@ opt_T_odom: !!opencv-matrix
    data: [0.983945902559416,-0.024543804521931,0.101,
           0.024543804521931,0.983945902559416,-0.087,
           0. , 0. , 1.]
-opt_freqency: 250
-data_path: "/home/zx/workspace/Anker_Project/SweeperReckoning/data/anker/4/"
+opt_freqency: 125
+#data_path: "/home/zx/workspace/Anker_Project/SweeperReckoning/data/anker/4/"
+data_path: "/media/zx/work/SlamDatas/anker/dataset/building14-floor2-12x4-collision/"
+#data_path: "/media/zx/work/SlamDatas/anker/dataset/building14-floor2-movearound-collision/"
+#data_path: "/media/zx/work/SlamDatas/anker/dataset/building14-floor2-circle1.2/"
+#data_path: "/media/zx/work/SlamDatas/anker/dataset/building14-floor2-12x4/"
