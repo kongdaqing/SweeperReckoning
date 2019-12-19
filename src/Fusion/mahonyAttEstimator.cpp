@@ -21,6 +21,9 @@ MahonyAttEstimator::MahonyAttEstimator(string _ConfigFile)
     printf("[Estimator]:Record file is %s\n",recordPath.c_str());
     printf("[Estimator]:LPF cutoff frequency is %f\n",FREQUENCY_CUTOFF);
 }
+
+
+
 MahonyAttEstimator::~MahonyAttEstimator()
 {
     recordFile.close();
@@ -57,6 +60,7 @@ void MahonyAttEstimator::InitializeEstimator(IMUType&_RawIMU)
     {
         printf("[Estimator]:Please keep robot steay for Initialization!!!\n");
         sumAcc.setZero();
+        sumGyro.setZero();
         countSum = 0;
         return;
     }

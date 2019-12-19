@@ -7,9 +7,7 @@
 #include "../Sensor/sensorType.hpp"
 #include <opencv2/opencv.hpp>
 #include <fstream>
-#define STEADY_GYRO_MINIRATE 10
-#define RAD2DEG 57.29578
-#define INITIALCOUNT 100
+
 #define FREQUENCY_CUTOFF 15.0
 #define KP 10
 #define KI 0.01
