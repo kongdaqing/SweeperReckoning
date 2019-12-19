@@ -35,13 +35,14 @@ add_executable(ankerReckoning src/AnkerInterface.cpp
 target_link_libraries(ankerReckoning  ${OpenCV_LIBS})
 
 
-#add_executable(compensateOdomByOpt src/testCompensate.cpp
-#    src/Fusion/mahonyAttEstimator.cpp
-#    src/AnomalyDetector/anomalyDetector.cpp
-#    src/Sensor/imu.cpp
-#    src/Sensor/odometry.cpp
-#    src/Sensor/optFlow.cpp
-#    src/Utility/lowPassFilter.cpp
-#    src/Anker/readAnkerDataFile.cpp)
+add_executable(compensateOdomByOpt src/testCompensate.cpp
+    src/Fusion/mahonyAttEstimator.cpp
+    src/Reckoning/DeadReckoning.cpp
+    src/AnomalyDetector/anomalyDetector.cpp
+    src/Sensor/imu.cpp
+    src/Sensor/odometry.cpp
+    src/Sensor/optFlow.cpp
+    src/Utility/lowPassFilter.cpp
+    src/Anker/readAnkerDataFile.cpp)
 
-#target_link_libraries(ankerReckoning  ${OpenCV_LIBS})
+target_link_libraries(compensateOdomByOpt  ${OpenCV_LIBS})
