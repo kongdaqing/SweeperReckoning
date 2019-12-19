@@ -25,8 +25,12 @@ opt_T_odom: !!opencv-matrix
           0.024543804521931,0.983945902559416,-0.087,
           0. , 0. , 1.]
 opt_freqency: 125
+opt_iqThr: 1300
 #data_path: "/home/zx/workspace/Anker_Project/SweeperReckoning/data/anker/4/"
-data_path: "/media/zx/work/SlamDatas/anker/dataset/building14-floor2-12x4-collision/"
+#data_path: "/media/zx/work/SlamDatas/anker/dataset/building14-floor2-12x4-collision/"
 #data_path: "/media/zx/work/SlamDatas/anker/dataset/building14-floor2-movearound-collision/"
 #data_path: "/media/zx/work/SlamDatas/anker/dataset/building14-floor2-circle1.2/"
-#data_path: "/media/zx/work/SlamDatas/anker/dataset/building14-floor2-12x4/"
+data_path: "/media/zx/work/SlamDatas/anker/dataset/building14-floor2-12x4/"
+#data_path: "/media/zx/work/SlamDatas/anker/dataset/building14-floor1-4x3-noimage/"
+detect_count: 10
+detect_thr: 0.005
