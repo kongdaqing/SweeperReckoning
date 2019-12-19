@@ -10,6 +10,12 @@ public:
   {
      setZero();
   }
+  Transform2D(Eigen::Vector3d _pose2D)
+  {
+    x = _pose2D[0];
+    y = _pose2D[1];
+    theta = _pose2D[2];
+  }
   void setZero()
   {
     x = 0;
@@ -21,6 +27,18 @@ public:
       x = _t.x;
       y = _t.y;
       theta = _t.theta;
+  }
+  Eigen::Vector2d Rotate(Eigen::Vector2d& vec)
+  {
+      Eigen::Vector2d outVec;
+      outVec[0] = vec[0] * cos(theta) - vec[1] * sin(theta);
+      outVec[1] = vec[0] * sin(theta) + vec[1] * cos(theta);
+      return  outVec;
+  }
+  void UpdatePose(const Eigen::Vector2d& _pose)
+  {
+     x += _pose[0];
+     y += _pose[1];
   }
   void UpdateTheta(double _dTheta)
   {
