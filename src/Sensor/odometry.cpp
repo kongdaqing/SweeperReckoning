@@ -1,5 +1,5 @@
 #include "odometry.hpp"
-#include "opencv2/opencv.hpp"
+
 
 
 Odometry::Odometry(string _configFile)
@@ -24,6 +24,7 @@ Odometry::Odometry(string _configFile)
   badTimestampCount = 0;
   T.setZero();
   T_imu.setZero();
+  lastOdom.time_s = -1.0;
 }
 Odometry::~Odometry()
 {
@@ -97,3 +98,25 @@ void Odometry::DeadReckoningUpdate(const OdometryType &_odoData,const IMUType& _
   recordFile << time_left_s << "," << T.x << "," << T.y << "," << T.theta << "," << T_imu.x << "," << T_imu.y << "," << T_imu.theta << endl;
 }
 
+Eigen::Vector3d Odometry::GetOdometryDeltaPose(const OdometryType &_odoData,const OdometryType &_lastOdom)
+{
+
+    double dt = _odoData.time_s - _lastOdom.time_s;
+    if(dt < 0)
+    {
+      printf("[Odometry]:Timestamp is not right recording curTime:%f vs lastTime:%f\n",_odoData.time_s,lastOdom.time_s);
+      return Eigen::Vector3d::Zero();
+    }
+    double leftVel = 0.5 * (_odoData.leftVelocity + _lastOdom.leftVelocity);
+    double rightVel = 0.5 * (_odoData.rightVelocity + _lastOdom.rightVelocity);
+    double dPosx = 0.5 * dt * (leftVel + rightVel);
+    double dTheta = dt * (rightVel - leftVel)/baseLine;
+    Eigen::Vector3d dPos(dPosx,0,dTheta);
+    return dPos;
+}
+
+void Odometry::GetOdometryVel(const OdometryType &_odoData, OdometryOptflowType &odomOptData)
+{
+  odomOptData.odomVel[0] = 0.5 * (_odoData.leftVelocity + _odoData.rightVelocity);
+  odomOptData.odomVel[1] = 0;
+}

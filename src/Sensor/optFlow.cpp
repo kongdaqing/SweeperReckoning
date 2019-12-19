@@ -1,7 +1,5 @@
 #include "optFlow.hpp"
-#include <opencv2/opencv.hpp>
-#include "../Utility/utility.hpp"
-#include <opencv2/core/eigen.hpp>
+
 OptFlow::OptFlow(string _configFile)
 {
   cv::FileStorage fsSetting(_configFile,cv::FileStorage::READ);
@@ -15,48 +13,101 @@ OptFlow::OptFlow(string _configFile)
   cv::cv2eigen(cv_T, T);
   printf("[Optflow]:Extrisic from Optflow to odometry is T \n");
   cout << T << endl;
-  lastData.time_s = -1.;
+  optIqThrMax = fsSetting["opt_iqThr"];
+  optIqTimeMin = fsSetting["opt_iqTime"];
+  if(optIqThrMax < 1300)
+    optIqThrMax = 1300;
+  if(optIqTimeMin < 0.1)
+    optIqTimeMin = 0.1;
   T_opt.setZero();
   goodStateFlg = true;
+  optflowGoodQualityFlg = true;
 }
 
 
 
-Eigen::Vector3d OptFlow::TransformOpt2Odom(const OptFlowType &_opt,const IMUType& _imu)
+Eigen::Vector3d OptFlow::TransformOpt2Odom(const OptFlowType &_opt,const OptFlowType & _lastOpt,const IMUType& _imu)
 {
-  Eigen::Vector3d optData;
-  Eigen::Vector3d odoData;
-  double dt = _opt.time_s - lastData.time_s;
-  optData[0] = _opt.optSumX - lastData.optSumX;
-  optData[1] = _opt.optSumY - lastData.optSumY;
+
+  double dt = _opt.time_s - _lastOpt.time_s;
+  if(dt <= 0 || dt > 4/freq)
+  {
+    printf("[Optflow]:Timestamp is not right curTime: %f and lastTime:%f\n",_opt.time_s,_lastOpt.time_s);
+    return Eigen::Vector3d::Zero();
+  }
+
+  Eigen::Vector3d optData,odoData;
+  optData[0] = _opt.optSumX - _lastOpt.optSumX;
+  optData[1] = _opt.optSumY - _lastOpt.optSumY;
   optData[2] = _imu.gyro.z() * dt;
   odoData = T*optData;
+  //cout << "[Optflow]: odomData is " << odoData.transpose() << endl;
   return  odoData;
+}
+
+void OptFlow::GetOdoVelFromOpt(const OptFlowType &_opt, const IMUType &_imu,OdometryOptflowType& odomOptData)
+{
+  static OptFlowType lastOptData = _opt;
+  double dt = _opt.time_s - lastOptData.time_s;
+  if(dt > 4/freq || dt <= 0)
+  {
+    printf("[Optflow]:Timestamp is not right between curTime %f and lastTime %f\n",_opt.time_s,lastOptData.time_s);
+    return;
+  }
+  Eigen::Vector3d dpos;
+  dpos = TransformOpt2Odom(_opt,lastOptData,_imu);
+  odomOptData.optVel[0] = dpos[0]/dt;
+  odomOptData.optVel[1] = dpos[1]/dt;
+  lastOptData = _opt;
 }
 
 void OptFlow::DeadReckoningUpdate(const OptFlowType &_opt, const IMUType &_imu)
 {
+  static OptFlowType lastData = _opt;
   double dt = _opt.time_s - lastData.time_s;
   double dTime = _opt.time_s - _imu.time_s;
-  if(lastData.time_s < 0 )
-  {
-    lastData = _opt;
-    T_opt.setZero();
-    return;
-  }
-
   if(dt > 10./freq || dt < 0 || fabs(dTime) > 1./freq)
   {
     goodStateFlg = false;
     printf("[Optflow]:Please check optflow data timestamp,its interval is so big!\n");
     return;
   }
-  Eigen::Vector3d dpos = TransformOpt2Odom(_opt,_imu);
+  Eigen::Vector3d dpos = TransformOpt2Odom(_opt,lastData,_imu);
   lastData = _opt;
   T_opt.x += dpos[0] * cos(T_opt.theta) - dpos[1] * sin(T_opt.theta);
   T_opt.y += dpos[0] * sin(T_opt.theta) + dpos[1] * cos(T_opt.theta);
   T_opt.UpdateTheta(dpos[2]);
   printf("[Optflow]:Timestamp %f pose is %f,%f,%f\n",_opt.time_s,T_opt.x,T_opt.y,T_opt.theta*RAD2DEG);
   recordFile << _opt.time_s << "," << dpos[0] << "," << dpos[1] << "," << T_opt.x << "," << T_opt.y << "," << T_opt.theta << endl;
+}
+
+void OptFlow::CheckOptflowDataQuality(const OptFlowType &_opt)
+{
+  static int count[2] = {0};
+  if(_opt.optFigIq > optIqThrMax)
+  {
+    if(optflowGoodQualityFlg)
+    {
+      count[0]++;
+      if(count[0] > optIqTimeMin*freq)
+      {
+        count[0] = 0;
+
+        optflowGoodQualityFlg = false;
+      }
+    }
+    count[1] = 0;
+  }else {
+    if(!optflowGoodQualityFlg)
+    {
+      count[1]++;
+      if(count[1] > optIqTimeMin*freq)
+      {
+        count[1] = 0;
+        optflowGoodQualityFlg = true;
+      }
+    }
+    count[0] = 0;
+  }
 
 }

@@ -9,6 +9,7 @@ IMU::IMU(std::string yamlFile)
   randomAccBias.setZero();
   randomGyroBias.setZero();
   gravity = G;
+  finishGyroBiasCalculationFlg = false;
   cv::FileStorage fsSettings(yamlFile, cv::FileStorage::READ);
   if(!fsSettings.isOpened())
   {
@@ -54,4 +55,31 @@ void IMU::SetCalibrRandomGyroBias(const Eigen::Vector3d &randGyrBias)
 void IMU::SetGravity(double _gravity)
 {
     gravity = _gravity;
+}
+
+void IMU::CalculateGyroBias(const IMUType &_imu)
+{
+  static Eigen::Vector3d sumGyro{Eigen::Vector3d::Zero()};
+  static int countSum = 0;
+  if(finishGyroBiasCalculationFlg)
+      return;
+  Eigen::Vector3d resAcc;
+  Eigen::Vector3d resGyr;
+  resGyr = GetCalibrGyroData(_imu.gyro);
+  if(resGyr.norm()*RAD2DEG > STEADY_GYRO_MINIRATE)
+  {
+      printf("[Estimator]:Please keep robot steay for Initialization!!!\n");
+      sumGyro.setZero();
+      countSum = 0;
+      return;
+  }
+  countSum++;
+  sumGyro += resGyr;
+  if(countSum == INITIALCOUNT)
+  {
+
+      Eigen::Vector3d averGyro = sumGyro/INITIALCOUNT;
+      SetCalibrRandomGyroBias(averGyro);
+      finishGyroBiasCalculationFlg = true;
+  }
 }

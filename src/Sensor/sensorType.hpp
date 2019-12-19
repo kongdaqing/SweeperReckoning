@@ -1,9 +1,14 @@
 #ifndef SENSORTYPE_H
 #define SENSORTYPE_H
 #include <Eigen/Dense>
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/eigen.hpp>
+#include <fstream>
 
+#define STEADY_GYRO_MINIRATE 10
 #define RAD2DEG 57.29578
-
+#define INITIALCOUNT 100
+#define G 9.7936
 
 struct OptFlowType
 {
@@ -33,6 +38,30 @@ struct IMUType{
     double time_s;
 };
 
+struct OdometryOptflowType
+{
+  OdometryOptflowType()
+  {
+    time_s = 0;
+    odomVel.setZero();
+    optVel.setZero();
+    odometryBadFlg = false;
+  }
+  OdometryOptflowType(double _time_s)
+  {
+    time_s = _time_s;
+    odomVel.setZero();
+    optVel.setZero();
+    odometryBadFlg = false;
+  }
+  Eigen::Vector2d odomVel;
+  Eigen::Vector2d optVel;
+  bool odometryBadFlg;
+  double time_s;
+};
+
+
+
 struct OdometryType
 {
   OdometryType()
@@ -49,5 +78,8 @@ struct OdometryType
   double leftPos;
   double rightPos;
 };
+
+
+
 
 #endif

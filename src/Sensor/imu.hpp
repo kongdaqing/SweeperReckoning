@@ -1,11 +1,6 @@
 #ifndef IMU_H
 #define IMU_H
-#include <Eigen/Dense>
-#include <opencv2/opencv.hpp>
-#include <opencv2/core/eigen.hpp>
-
-#define G 9.7936
-
+#include "sensorType.hpp"
 
 
 class IMU
@@ -18,6 +13,8 @@ public:
     void SetCalibrRandomGyroBias(const Eigen::Vector3d& randGyrBias);
     void SetCalibrRandomAccBias(const Eigen::Vector3d& randAccBias);
     void SetGravity(double _gravity);
+    void CalculateGyroBias(const IMUType& _imu);
+    bool GetFinishGyroBiasCalculationFlg(){return  finishGyroBiasCalculationFlg;};
     double freq;
 private:
 Eigen::Vector3d accBias;
@@ -27,6 +24,7 @@ Eigen::Matrix3d gyrM;
 Eigen::Vector3d randomAccBias;
 Eigen::Vector3d randomGyroBias;
 double gravity;
+bool finishGyroBiasCalculationFlg;
 };
 
 
