@@ -24,9 +24,9 @@ struct AnkerData
     double odo_left_vel;
     double opt_pos_x;
     double opt_pos_y;
-    unsigned short int opt_quality;
-    unsigned short int wall_distance_right;
-    unsigned short int wall_distance_left;
+    double opt_quality;
+    double wall_distance_right;
+    double wall_distance_left;
 };
 
 
