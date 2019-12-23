@@ -5,8 +5,6 @@ OptFlow::OptFlow(string _configFile)
   cv::FileStorage fsSetting(_configFile,cv::FileStorage::READ);
   string savePath = fsSetting["data_path"];
   savePath += "output/optT.csv";
-  recordFile.open(savePath);
-  recordFile << "time_s" << "," << "dpx" << "," << "dpy" << "," << "px" << "," << "py" << "," <<  "theta" << endl;
   freq = fsSetting["opt_freqency"];
   cv::Mat cv_T;
   fsSetting["opt_T_odom"] >> cv_T;
@@ -19,8 +17,6 @@ OptFlow::OptFlow(string _configFile)
     optIqThrMax = 1300;
   if(optIqTimeMin < 0.1)
     optIqTimeMin = 0.1;
-  T_opt.setZero();
-  goodStateFlg = true;
   optflowGoodQualityFlg = true;
 }
 
@@ -61,25 +57,7 @@ void OptFlow::GetOdoVelFromOpt(const OptFlowType &_opt, const IMUType &_imu,Odom
   lastOptData = _opt;
 }
 
-void OptFlow::DeadReckoningUpdate(const OptFlowType &_opt, const IMUType &_imu)
-{
-  static OptFlowType lastData = _opt;
-  double dt = _opt.time_s - lastData.time_s;
-  double dTime = _opt.time_s - _imu.time_s;
-  if(dt > 10./freq || dt < 0 || fabs(dTime) > 1./freq)
-  {
-    goodStateFlg = false;
-    printf("[Optflow]:Please check optflow data timestamp,its interval is so big!\n");
-    return;
-  }
-  Eigen::Vector3d dpos = TransformOpt2Odom(_opt,lastData,_imu);
-  lastData = _opt;
-  T_opt.x += dpos[0] * cos(T_opt.theta) - dpos[1] * sin(T_opt.theta);
-  T_opt.y += dpos[0] * sin(T_opt.theta) + dpos[1] * cos(T_opt.theta);
-  T_opt.UpdateTheta(dpos[2]);
-  printf("[Optflow]:Timestamp %f pose is %f,%f,%f\n",_opt.time_s,T_opt.x,T_opt.y,T_opt.theta*RAD2DEG);
-  recordFile << _opt.time_s << "," << dpos[0] << "," << dpos[1] << "," << T_opt.x << "," << T_opt.y << "," << T_opt.theta << endl;
-}
+
 
 void OptFlow::CheckOptflowDataQuality(const OptFlowType &_opt)
 {
