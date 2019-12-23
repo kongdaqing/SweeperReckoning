@@ -4,6 +4,8 @@ DeadReckoning::DeadReckoning(std::string _configFile,IMU *_imu):imu(_imu)
 {
     finishInitializationFlg = false;
     pose2D.setZero();
+    optPose2D.setZero();
+    odoPose2D.setZero();
     cv::FileStorage fsSettings(_configFile, cv::FileStorage::READ);
     if(!fsSettings.isOpened())
     {
@@ -12,8 +14,9 @@ DeadReckoning::DeadReckoning(std::string _configFile,IMU *_imu):imu(_imu)
     std::string recordPath = fsSettings["data_path"];
     recordPath = recordPath + "output/reckoning.csv";
     recordFile.open(recordPath);
-    recordFile << "timestamp" << "," << "odo_vx" << "," << "odo_vy" << "," << "opt_vx" << ","
-               << "opt_vy" <<  "," <<  "px" << "," << "py" << "," << "theta"  <<  "," << "flg" << std::endl;
+    recordFile << "timestamp" << "," << "px" << "," << "py" << "," << "theta" << ","
+               << "odom_px" <<  "," << "odom_py" << "," << "odom_theta" << ","
+               << "opt_px"  <<  "," << "opt_py" << "," << "opt_theta" << "," << "flg" << std::endl;
 
 }
 
@@ -29,6 +32,8 @@ DeadReckoning::~DeadReckoning()
 void DeadReckoning::SetPose(Transform2D _pose)
 {
     pose2D.SetTransform(_pose);
+    odoPose2D.SetTransform(_pose);
+    optPose2D.SetTransform(_pose);
 }
 
 void DeadReckoning::Initialize()
@@ -41,7 +46,18 @@ void DeadReckoning::Initialize()
    }
 }
 
+void DeadReckoning::Transform2DMidUpdate(Transform2D& _T2D,const Eigen::Vector2d &_lastVel, const Eigen::Vector2d &_curVel, double _lastGz, double _curGz, double dt)
+{
+  Eigen::Vector2d lastDpos = _lastVel * dt;
+  Eigen::Vector2d curDpos = _curVel * dt;
+  lastDpos = _T2D.Rotate(lastDpos);
+  double wz = 0.5 * (_lastGz + _curGz);
+  _T2D.UpdateTheta(wz);
+  curDpos = _T2D.Rotate(curDpos);
+  curDpos = 0.5 * (lastDpos + curDpos);
+  _T2D.UpdatePose(curDpos);
 
+}
 void DeadReckoning::Update(const OdometryOptflowType &_odomOptData, const IMUType &_imu)
 {
 
@@ -77,24 +93,16 @@ void DeadReckoning::Update(const OdometryOptflowType &_odomOptData, const IMUTyp
        curVel[0] = _odomOptData.odomVel[0];
        curVel[1] = _odomOptData.odomVel[1];
     }
+
     Eigen::Vector3d lastImuGyro = imu->GetCalibrGyroData(lastData.imu.gyro);
     Eigen::Vector3d curImuGyro = imu->GetCalibrGyroData(_imu.gyro);
-    double gz = 0.5 * (lastImuGyro.z() + curImuGyro.z());
-    Eigen::Vector2d lastDpos = lastData.Spd * dt;
-    Eigen::Vector2d curDpos = curVel * dt;
-
-
-    lastDpos = pose2D.Rotate(lastDpos);
-    pose2D.UpdateTheta(gz * dt);
-    curDpos = pose2D.Rotate(curDpos);
-    curDpos = 0.5 * (curDpos + lastDpos);
-   // std::cout << "[Reckoning]:curVel is " << _odomOptData.optVel[0] << "," << _odomOptData.optVel[1] << std::endl;
-
-    pose2D.UpdatePose(curDpos);
-
+    Transform2DMidUpdate(pose2D,lastData.Spd,curVel,lastImuGyro.z(),curImuGyro.z(),dt);
+    Transform2DMidUpdate(odoPose2D,lastData.odomOpt.odomVel,_odomOptData.odomVel,lastImuGyro.z(),curImuGyro.z(),dt);
+    Transform2DMidUpdate(optPose2D,lastData.odomOpt.optVel,_odomOptData.optVel,lastImuGyro.z(),curImuGyro.z(),dt);
+    recordFile << _imu.time_s << "," << pose2D.x << "," << pose2D.y << "," << pose2D.theta << "," << odoPose2D.x
+               << "," << odoPose2D.y << "," << odoPose2D.theta << "," << optPose2D.x << "," << optPose2D.y << ","
+               << optPose2D.theta << "," << _odomOptData.odometryBadFlg << std::endl;
     lastData.imu = _imu;
     lastData.odomOpt = _odomOptData;
     lastData.Spd = curVel;
-    recordFile << _imu.time_s << "," << _odomOptData.odomVel[0] << "," << _odomOptData.odomVel[1] << "," << _odomOptData.optVel[0] << ","
-               << _odomOptData.optVel[1] << "," << pose2D.x << "," << pose2D.y << "," << pose2D.theta << "," << _odomOptData.odometryBadFlg << std::endl;
 }
