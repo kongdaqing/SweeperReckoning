@@ -51,7 +51,7 @@ void DeadReckoning::Transform2DMidUpdate(Transform2D& _T2D,const Eigen::Vector2d
   Eigen::Vector2d lastDpos = _lastVel * dt;
   Eigen::Vector2d curDpos = _curVel * dt;
   lastDpos = _T2D.Rotate(lastDpos);
-  double wz = 0.5 * (_lastGz + _curGz);
+  double wz = 0.5 * (_lastGz + _curGz) * dt;
   _T2D.UpdateTheta(wz);
   curDpos = _T2D.Rotate(curDpos);
   curDpos = 0.5 * (lastDpos + curDpos);
@@ -77,12 +77,7 @@ void DeadReckoning::Update(const OdometryOptflowType &_odomOptData, const IMUTyp
       lastData.firstFlg = false;
       return;
     }
-    double dt = _imu.time_s - lastData.imu.time_s;
-    if(dt > 4/imu->freq || dt <= 0)
-    {
-        printf("[Odometry]:Timestamp is not right recording curTime:%f vs lastTime:%f\n",_imu.time_s,lastData.imu.time_s);
-        return;
-    }
+
     Eigen::Vector2d curVel;
     curVel.setZero();
     if(_odomOptData.odometryBadFlg)
@@ -92,6 +87,15 @@ void DeadReckoning::Update(const OdometryOptflowType &_odomOptData, const IMUTyp
     }else {
        curVel[0] = _odomOptData.odomVel[0];
        curVel[1] = _odomOptData.odomVel[1];
+    }
+    double dt = _imu.time_s - lastData.imu.time_s;
+    if(dt > 4/imu->freq || dt <= 0)
+    {
+      lastData.imu = _imu;
+      lastData.odomOpt = _odomOptData;
+      lastData.Spd = curVel;
+      printf("[DeadReckoning]:Timestamp is not right recording curTime:%f and lastTime:%f\n",_imu.time_s,lastData.imu.time_s);
+      return;
     }
 
     Eigen::Vector3d lastImuGyro = imu->GetCalibrGyroData(lastData.imu.gyro);

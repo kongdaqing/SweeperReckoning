@@ -58,6 +58,8 @@ void AnomalyDetector::DetectOdomOptState(const IMUType &_imu, const OptFlowType 
   static OdometryType lastOdom = _odom;
   if(!imuPtr->GetFinishGyroBiasCalculationFlg())
   {
+    lastOpt = _opt;
+    lastOdom = _odom;
     return;
   }
   Eigen::Vector3d calibrGyro = imuPtr->GetCalibrGyroData(_imu.gyro);

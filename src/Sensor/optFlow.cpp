@@ -41,20 +41,19 @@ Eigen::Vector3d OptFlow::TransformOpt2Odom(const OptFlowType &_opt,const OptFlow
   return  odoData;
 }
 
-void OptFlow::GetOdoVelFromOpt(const OptFlowType &_opt, const IMUType &_imu,OdometryOptflowType& odomOptData)
+void OptFlow::GetOdoVelFromOpt(const OptFlowType &_opt,const OptFlowType & _lastOpt,const IMUType &_imu,OdometryOptflowType& odomOptData)
 {
-  static OptFlowType lastOptData = _opt;
-  double dt = _opt.time_s - lastOptData.time_s;
+  double dt = _opt.time_s - _lastOpt.time_s;
   if(dt > 4/freq || dt <= 0)
   {
-    printf("[Optflow]:Timestamp is not right between curTime %f and lastTime %f\n",_opt.time_s,lastOptData.time_s);
+    printf("[Optflow]:Timestamp is not right between curTime %f and lastTime %f\n",_opt.time_s,_lastOpt.time_s);
     return;
   }
   Eigen::Vector3d dpos;
-  dpos = TransformOpt2Odom(_opt,lastOptData,_imu);
+  dpos = TransformOpt2Odom(_opt,_lastOpt,_imu);
   odomOptData.optVel[0] = dpos[0]/dt;
   odomOptData.optVel[1] = dpos[1]/dt;
-  lastOptData = _opt;
+
 }
 
 

@@ -38,3 +38,15 @@ add_executable(compensateOdomByOpt src/testCompensate.cpp
     src/Anker/readAnkerDataFile.cpp)
 
 target_link_libraries(compensateOdomByOpt  ${OpenCV_LIBS})
+
+
+add_library(ankerSweeperLib src/testCompensate.cpp
+    src/Fusion/mahonyAttEstimator.cpp
+    src/Reckoning/DeadReckoning.cpp
+    src/AnomalyDetector/anomalyDetector.cpp
+    src/Sensor/imu.cpp
+    src/Sensor/odometry.cpp
+    src/Sensor/optFlow.cpp
+    src/Utility/lowPassFilter.cpp
+    src/Anker/readAnkerDataFile.cpp)
+target_link_libraries(ankerSweeperLib  ${OpenCV_LIBS})

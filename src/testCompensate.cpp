@@ -56,6 +56,7 @@ int main(int argc,char **argv)
   OptFlow *opt = new OptFlow(configFile);
   AnomalyDetector anomalyDetector(configFile,imu,odom,opt);
   DeadReckoning reckoning(configFile,imu);
+  OptFlowType lastOptData;
   while(AnkerDatas.AnkerDataSet.size() > 1)
   {
     AnkerData ankerData = AnkerDatas.AnkerDataSet.front();
@@ -65,7 +66,10 @@ int main(int argc,char **argv)
     OptFlowType optData;
     ExtractAnkerData(ankerData,imuData,odomData,optData);
     if(!imu->GetFinishGyroBiasCalculationFlg())
+    {
+      lastOptData = optData;
       imu->CalculateGyroBias(imuData);
+    }
     else {
       anomalyDetector.DetectOdomOptState(imuData,optData,odomData);
       OdometryOptflowType odomOptflowData(imuData.time_s);
@@ -91,7 +95,8 @@ int main(int argc,char **argv)
       IMUType imuCalibr = imuData;
       imuCalibr.gyro = gyroCalibr;
       odom->GetOdometryVel(odomData,odomOptflowData);
-      opt->GetOdoVelFromOpt(optData,imuCalibr,odomOptflowData);
+      opt->GetOdoVelFromOpt(optData,lastOptData,imuCalibr,odomOptflowData);
+      lastOptData = optData;
       reckoning.Update(odomOptflowData,imuData);
     }
 
