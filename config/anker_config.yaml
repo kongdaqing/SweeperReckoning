@@ -27,7 +27,8 @@ opt_T_odom: !!opencv-matrix
 opt_freqency: 250
 opt_iqThr: 1300
 opt_iqTime: 0.1
-data_path: "/media/zx/work/SlamDatas/anker/dataset/b14-f2-13x4-r1/"
+data_path: "/Users/kongdaqing/Desktop/workspace/project/SLAM/dataset/anker/b14-f2-20x5-r2/data_set/"
+#data_path: "/media/zx/work/SlamDatas/anker/dataset/b14-f2-13x4-r1/"
 #data_path: "/home/zx/workspace/Anker_Project/SweeperReckoning/data/anker/4/"
 #data_path: "/media/zx/work/SlamDatas/anker/dataset/building14-floor2-12x4-collision/"
 #data_path: "/media/zx/work/SlamDatas/anker/dataset/building14-floor2-movearound-collision/"
