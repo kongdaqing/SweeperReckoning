@@ -4,12 +4,13 @@ MahonyAttEstimator::MahonyAttEstimator(string _ConfigFile)
 {
     imu = new IMU(_ConfigFile);
     cv::FileStorage fsSetting(_ConfigFile,cv::FileStorage::READ);
-    string recordPath = fsSetting["data_path"];
-    recordPath = recordPath + "output/attitude.csv";
+    string recordPath = fsSetting["save_path"];
+    recordPath = recordPath + "attitude.csv";
     recordFile.open(recordPath);
-    recordFile << "t" << "," << "roll" << "," << "pitch" << "," << "yaw" << "," << "aroll" << "," << "apitch" << ","
-               << "ax" << "," << "ay" << "," << "az" << "," << "lax" << ","  << "lay" << "," << "laz" <<  endl;
-    recordFile.precision(9);
+    recordFile << "t" << "," << "q_w" << "," << "q_x" << "," << "q_y" << "," << "qz" << "," << "roll(rad)" << ","
+               << "pitch(rad)" << "," << "yaw(rad)" << "," << "acc_roll(rad)" << "," << "acc_pitch(rad)" << ","  << "acc_yaw(rad)" <<  endl;
+    recordFile << std::fixed;
+    recordFile.precision(6);
     initialSuccessFlg = false;
     initalEuler.setZero();
     q.setIdentity();
@@ -92,8 +93,8 @@ bool MahonyAttEstimator::InitializeAttitude(Eigen::Vector3d &_Acc)
     Eigen::Vector3d tiltEuler = Utility::Acc2TiltAngle(_Acc);
     initalEuler[0] = tiltEuler[0];
     initalEuler[1] = tiltEuler[1];
+/*
     double tiltAngleNorm = sqrt(initalEuler[0]*initalEuler[0] + initalEuler[1]*initalEuler[1]);
-
     if(tiltAngleNorm*RAD2DEG > 20){
         printf("[Estimator]: Initailization Failure because robot is not flat on the ground,you should put it flat!\n");
         return false;
@@ -101,7 +102,10 @@ bool MahonyAttEstimator::InitializeAttitude(Eigen::Vector3d &_Acc)
         Utility::Euler2Quadnion(initalEuler,q);
         euler = Utility::Quaternion2EulerAngles(q);
         printf("[Estimator]: Intialization Success!Theta = %f, Phi = %f \n",initalEuler[0]*RAD2DEG,initalEuler[1]*RAD2DEG);
-    }
+    }*/
+    Utility::Euler2Quadnion(initalEuler,q);
+    euler = Utility::Quaternion2EulerAngles(q);
+    printf("[Estimator]: Intialization Success!Theta = %f, Phi = %f \n",initalEuler[0]*RAD2DEG,initalEuler[1]*RAD2DEG);
     return  true;
 }
 
@@ -168,8 +172,8 @@ void MahonyAttEstimator::EstimateAttitude(IMUType&_RawIMU)
     Eigen::Vector3d acc2euler = Utility::Acc2TiltAngle(_RawIMU.acc);
 
     double  time_left_s = fmod(time_s,10000.0);
-    recordFile << time_left_s << "," << euler[0]*RAD2DEG << "," << euler[1]*RAD2DEG << "," << euler[2]*RAD2DEG << "," << acc2euler[0]*RAD2DEG << "," << acc2euler[1]*RAD2DEG
-               << "," << resAcc.x()  << "," << resAcc.y() << "," << resAcc.z() << "," << lpfAcc.x() << "," << lpfAcc.y() << "," << lpfAcc.z() << endl;
+    recordFile << time_s << "," << q.w() << "," << q.x() << "," << q.y() << "," << q.z() << "," << euler[0] << ","
+               << euler[1] << "," << euler[2] << "," << acc2euler[0] << "," << acc2euler[1] << "," << acc2euler[2] << endl;
     cout << "[Estimator]:"<<"Timestamp " << time_left_s << " Est quaternion is " << q.w() << " " << q.x() << " " << q.y() << " " << q.z() << endl;
     printf("[Estimator]:Current attitude angle roll-pitch-yaw : %f, %f, %f; Acc2Euler is %f %f\n",euler[0]*RAD2DEG,euler[1]*RAD2DEG,euler[2]*RAD2DEG,acc2euler[0]*RAD2DEG,acc2euler[1]*RAD2DEG);
 }
