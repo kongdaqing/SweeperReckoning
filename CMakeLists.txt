@@ -25,7 +25,13 @@ add_executable(eurocAttitudeEstimation src/eurocAttEst.cpp
     src/Utility/lowPassFilter.cpp)
 target_link_libraries(eurocAttitudeEstimation  ${OpenCV_LIBS})
 
-
+add_executable(simAttitudeEstimation src/simAttEst.cpp
+    src/Fusion/mahonyAttEstimator.cpp
+    src/Sensor/imu.cpp
+    src/Sensor/odometry.cpp
+    src/Sensor/optFlow.cpp
+    src/Utility/lowPassFilter.cpp)
+target_link_libraries(simAttitudeEstimation  ${OpenCV_LIBS})
 
 add_executable(compensateOdomByOpt src/testCompensate.cpp
     src/Fusion/mahonyAttEstimator.cpp
