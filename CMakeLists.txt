@@ -15,15 +15,15 @@ find_package(OpenCV REQUIRED)
 
 include_directories()
 
-add_executable(testReckoning src/test.cpp
+
+add_executable(eurocAttitudeEstimation src/eurocAttEst.cpp
+    src/Euroc/readEurocData.cpp
     src/Fusion/mahonyAttEstimator.cpp
     src/Sensor/imu.cpp
     src/Sensor/odometry.cpp
     src/Sensor/optFlow.cpp
     src/Utility/lowPassFilter.cpp)
-
-target_link_libraries(testReckoning  ${OpenCV_LIBS})
-
+target_link_libraries(eurocAttitudeEstimation  ${OpenCV_LIBS})
 
 
 
