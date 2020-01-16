@@ -1,16 +1,21 @@
 #include "readEurocData.h"
-
+#include "../Utility/utility.hpp"
 readEurocData::readEurocData(const string& _dataPath)
 {
     string imuPath = _dataPath + "imu0/data.csv";
     string gtPath = _dataPath + "state_groundtruth_estimate0/data.csv";
     string vcPosePath = _dataPath + "leica0/data.csv";
+    string saveAttPath = _dataPath + "gt_attitude.csv";
+    attRecord.open(saveAttPath.c_str());
+    attRecord << fixed;
+    attRecord << "#" << "t" << "," << "qw" << "," << "qx" << "," << "qy" << "," << "qz" << "," << "roll" << "," << "pitch" << "," << "yaw"  << endl;
 
     readIMUData(imuPath);
     readEstGroundTruth(gtPath);
     readVisualCapturePosition(vcPosePath);
     printf("[ReadEurocData]:Read Finish!IMUData size is %d,Estimate GroundTrut size is %d and VisualCapture"
            " Pose size is %d!\n",eurocImuVec.size(),eurocGroundTruthVec.size(),eurocVCPosVec.size());
+    attRecord.close();
 }
 
 void readEurocData::readIMUData(const string &_imuPath)
@@ -66,10 +71,11 @@ void readEurocData::readEstGroundTruth(const string &_gtPath)
     getline(gtFile,firstline);
     while(!gtFile.eof())
     {
-        string lineStr[14];
+        string lineStr[17];
         long int time;
         double quat[4];
         Vector3d pos;
+        Vector3d vel;
         Vector3d bias_w;
         Vector3d bias_a;
         for(int i =0;i<14;i++)
@@ -87,17 +93,22 @@ void readEurocData::readEstGroundTruth(const string &_gtPath)
             }else if(i < 8){
                 quat[i-4] = atof(lineStr[i].c_str());
             }else if(i < 11){
-                bias_w[i-8] = atof(lineStr[i].c_str());
+                vel[i-8] = atof(lineStr[i].c_str());
+            }else if(i < 14){
+                bias_w[i-11] = atof(lineStr[i].c_str());
             }else {
-                bias_a[i-11] = atof(lineStr[i].c_str());
+                bias_a[i-14] = atof(lineStr[i].c_str());
             }
 
         }
         if(!lineStr->empty())
         {
             Quaterniond q(quat[0],quat[1],quat[2],quat[3]);
-            eurocEstGroundTruth gtData(time,pos,q,bias_w,bias_a);
+            eurocEstGroundTruth gtData(time,pos,q,vel,bias_w,bias_a);
             eurocGroundTruthVec.push_back(gtData);
+            Vector3d euler = Utility::Quaternion2ZYXEulerAngles(q);
+            attRecord << gtData.time_s << "," << q.w() << "," << q.x() << "," << q.y() << ","
+                      << q.z() << "," << euler.x() << "," << euler.y() << "," << euler.z() << endl;
             if(eurocGroundTruthVec.size() % 200 == 0 )
                 printf("[ReadEurocData]:Euroc ground-truth current time_s is %f and recive size is %d!\n",gtData.time_s,eurocGroundTruthVec.size());
         }

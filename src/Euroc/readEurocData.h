@@ -16,7 +16,7 @@ public:
     vector<eurocImu> eurocImuVec;
     vector<eurocEstGroundTruth> eurocGroundTruthVec;
     vector<eurocVisualCapturePos> eurocVCPosVec;
-
+    ofstream attRecord;
 };
 
 #endif // READEUROCDATA_H
