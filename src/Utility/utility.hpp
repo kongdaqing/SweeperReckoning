@@ -1,6 +1,6 @@
 #pragma once
 #include <Eigen/Dense>
-#define pi 3.1415926
+
 
 class Utility
 {
@@ -42,23 +42,47 @@ public:
         return  SkewMatrix;
     }
 
-    static Eigen::Vector3d Quaternion2EulerAngles(Eigen::Quaterniond& q)
+    static Eigen::Vector3d Quaternion2ZYXEulerAngles(Eigen::Quaterniond& q)
     {
         double q0 = q.w();
         double q1 = q.x();
         double q2 = q.y();
         double q3 = q.z();
         double roll,pitch,yaw;
-        roll = atan2(2 * (q2*q3 + q0*q1), q0*q0 - q1*q1 - q2*q2 + q3*q3);
-        pitch = asin(2 * (q0*q2 - q1*q3));
-        yaw = atan2(2 * (q1*q2 + q0*q3), q0*q0 + q1*q1 - q2*q2 - q3*q3);
-        if(yaw > pi)
-            yaw = yaw - 2*pi;
-        if(yaw < -pi)
-            yaw = yaw + 2*pi;
+        const double Epsilon = 0.0009765625f;
+        const double Threshold = 0.5f - Epsilon;
+
+        double TEST = q0*q2 - q1*q3;
+
+        if (TEST < -Threshold || TEST > Threshold) // 奇异姿态,俯仰角为±90°
+        {
+            double sign = TEST > 0 ? 1.:-1.;
+            yaw = -2.0 * sign * atan2(q1, q0); // yaw
+            pitch = sign * (M_PI / 2.0); // pitch
+            roll = 0; // roll
+        }else {
+
+            roll = atan2(2 * (q2*q3 + q0*q1), q0*q0 - q1*q1 - q2*q2 + q3*q3);
+            pitch = asin(2 * (q0*q2 - q1*q3));
+            yaw = atan2(2 * (q1*q2 + q0*q3), q0*q0 + q1*q1 - q2*q2 - q3*q3);
+        }
+
+        if(yaw > M_PI)
+            yaw = yaw - 2 * M_PI;
+        if(yaw < -M_PI)
+            yaw = yaw + 2 * M_PI;
         Eigen::Vector3d euler(roll,pitch,yaw);
         return euler;
     }
+    //This method is not right for experiment at some input
+    static Eigen::Vector3d Quaternion2EulerAngles(Eigen::Quaterniond & q)
+    {
+        Eigen::Matrix3d R = q.matrix();
+        Eigen::Vector3d euler = R.eulerAngles(2,1,0);
+        return Eigen::Vector3d(euler[2],euler[1],euler[0]);
+    }
+
+
     static Eigen::Vector3d Acc2TiltAngle(Eigen::Vector3d& acc)
     {
         Eigen::Vector3d Euler;
