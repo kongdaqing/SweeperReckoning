@@ -101,10 +101,10 @@ int main(int argc,char **argv)
         }
         else{
             attEstimator.EstimateAttitude(eurocIMU);
-            if(eurocGT.euler[2] > pi)
-                eurocGT.euler[2] -= 2*pi;
-            if(eurocGT.euler[2] < -pi)
-                eurocGT.euler[2] += 2*pi;
+            if(eurocGT.euler[2] > M_PI)
+                eurocGT.euler[2] -= 2 * M_PI;
+            if(eurocGT.euler[2] < -M_PI)
+                eurocGT.euler[2] += 2 * M_PI;
             gtattSaveFile << eurocGT.time_s << "," << eurocGT.euler[0]*RAD2DEG << "," << eurocGT.euler[1]*RAD2DEG << "," << eurocGT.euler[2]*RAD2DEG << endl;
         }
 

@@ -12,19 +12,6 @@ using namespace std;
 
 
 
-struct GroundTruthType{
-    GroundTruthType()
-    {
-        pos.setZero();
-        q.setIdentity();
-        time_s = 0;
-    }
-    Eigen::Vector3d pos;
-    Eigen::Quaterniond q;
-    Eigen::Vector3d euler;
-    double  time_s;
-};
-
 int main(int argc,char **argv)
 {
     cout << "Hello Anker!" << endl;
@@ -57,6 +44,7 @@ int main(int argc,char **argv)
             eurocEstGroundTruth gtData = eurocDataSet.eurocGroundTruthVec[j];
             if(fabs(gtData.time_s - imu.time_s) < 2/attEstimator.GetIMUDataFreqency())
             {
+                printf("[Main]:Get first gt quad is w:%f x:%f y:%f z:%f!\n",gtData.q.w(),gtData.q.x(),gtData.q.y(),gtData.q.z());
                 attEstimator.SetQuadnion(gtData.q);
                 initialFlg = false;
             }else if (gtData.time_s > imu.time_s) {
@@ -70,6 +58,7 @@ int main(int argc,char **argv)
             imudata.time_s = imu.time_s;
             imudata.acc = imu.acc;
             imudata.gyro = imu.gyro;
+            //KDQ: we can't estimate yaw value unless we have magnetometer,so yaw value is far away groudtruth gradually!
             attEstimator.EstimateAttitude(imudata);
         }
         chrono::microseconds dura(10);
