@@ -7,8 +7,8 @@ MahonyAttEstimator::MahonyAttEstimator(string _ConfigFile)
     string recordPath = fsSetting["save_path"];
     recordPath = recordPath + "attitude.csv";
     recordFile.open(recordPath);
-    recordFile << "t" << "," << "q_w" << "," << "q_x" << "," << "q_y" << "," << "qz" << "," << "roll(rad)" << ","
-               << "pitch(rad)" << "," << "yaw(rad)" << "," << "acc_roll(rad)" << "," << "acc_pitch(rad)" << ","  << "acc_yaw(rad)" <<  endl;
+    recordFile << "#" << "t" << "," << "q_w" << "," << "q_x" << "," << "q_y" << "," << "q_z" << "," << "roll[rad]" << ","
+               << "pitch[rad]" << "," << "yaw[rad]" << "," << "acc_roll[rad]" << "," << "acc_pitch[rad]" << ","  << "acc_yaw[rad]" <<  endl;
     recordFile << std::fixed;
     recordFile.precision(6);
     initialSuccessFlg = false;
@@ -43,7 +43,7 @@ void MahonyAttEstimator::SetInitialAttitude(Eigen::Vector3d &_euler)
 void MahonyAttEstimator::SetQuadnion(Eigen::Quaterniond &_quad)
 {
     q = _quad;
-    euler = Utility::Quaternion2EulerAngles(q);
+    euler = Utility::Quaternion2ZYXEulerAngles(q);
 }
 
 void MahonyAttEstimator::InitializeEstimator(IMUType&_RawIMU)
@@ -104,7 +104,7 @@ bool MahonyAttEstimator::InitializeAttitude(Eigen::Vector3d &_Acc)
         printf("[Estimator]: Intialization Success!Theta = %f, Phi = %f \n",initalEuler[0]*RAD2DEG,initalEuler[1]*RAD2DEG);
     }*/
     Utility::Euler2Quadnion(initalEuler,q);
-    euler = Utility::Quaternion2EulerAngles(q);
+    euler = Utility::Quaternion2ZYXEulerAngles(q);
     printf("[Estimator]: Intialization Success!Theta = %f, Phi = %f \n",initalEuler[0]*RAD2DEG,initalEuler[1]*RAD2DEG);
     return  true;
 }
@@ -125,8 +125,12 @@ void MahonyAttEstimator::EstimateAttitude(IMUType&_RawIMU)
     last_time = time_s;
     double halfT = 0.5*delta_time_s;
     Eigen::Vector3d lpfAcc,lpfGyro;
+    /*
     lpfAcc = accLPF.apply(resAcc,delta_time_s);
     lpfGyro = gyrLPF.apply(resGyro,delta_time_s);
+    */
+    lpfAcc = accLPF.apply(resAcc,0.);
+    lpfGyro = gyrLPF.apply(resGyro,0);
     if(delta_time_s <= 0)
     {
         printf("[Estimator]:Timestamp sequence is not right,please check timestamp!!!\n");
@@ -168,7 +172,7 @@ void MahonyAttEstimator::EstimateAttitude(IMUType&_RawIMU)
     Eigen::Quaterniond dq(1,halfGyro[0],halfGyro[1],halfGyro[2]);
     q = q*dq;
     q.normalize();
-    euler = Utility::Quaternion2EulerAngles(q);
+    euler = Utility::Quaternion2ZYXEulerAngles(q);
     Eigen::Vector3d acc2euler = Utility::Acc2TiltAngle(_RawIMU.acc);
 
     double  time_left_s = fmod(time_s,10000.0);
