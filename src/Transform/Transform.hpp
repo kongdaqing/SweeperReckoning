@@ -1,7 +1,7 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 #include <Eigen/Dense>
-#define pi 3.1415926
+#define pasi 3.1415926
 
 class Transform2D
 {
@@ -43,10 +43,10 @@ public:
   void UpdateTheta(double _dTheta)
   {
     theta += _dTheta;
-    if(theta > pi)
-      theta -= 2*pi;
-    if(theta < -pi)
-      theta += 2*pi;
+    if(theta > pasi)
+      theta -= 2*pasi;
+    if(theta < -pasi)
+      theta += 2*pasi;
   }
   double x;
   double y;
