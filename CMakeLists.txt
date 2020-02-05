@@ -33,7 +33,7 @@ add_executable(simAttitudeEstimation src/simAttEst.cpp
     src/Utility/lowPassFilter.cpp)
 target_link_libraries(simAttitudeEstimation  ${OpenCV_LIBS})
 
-add_executable(compensateOdomByOpt src/testCompensate.cpp
+add_executable(DeadReckoning src/testReckoning.cpp
     src/Fusion/mahonyAttEstimator.cpp
     src/Reckoning/DeadReckoning.cpp
     src/AnomalyDetector/anomalyDetector.cpp
@@ -43,10 +43,10 @@ add_executable(compensateOdomByOpt src/testCompensate.cpp
     src/Utility/lowPassFilter.cpp
     src/Anker/readAnkerDataFile.cpp)
 
-target_link_libraries(compensateOdomByOpt  ${OpenCV_LIBS})
+target_link_libraries(DeadReckoning  ${OpenCV_LIBS})
 
 
-add_library(ankerSweeperLib src/testCompensate.cpp
+add_library(ankerSweeperLib src/testReckoning.cpp
     src/Fusion/mahonyAttEstimator.cpp
     src/Reckoning/DeadReckoning.cpp
     src/AnomalyDetector/anomalyDetector.cpp
