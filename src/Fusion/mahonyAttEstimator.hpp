@@ -25,6 +25,7 @@ public:
     void InitializeEstimator(IMUType&_RawIMU);
     bool InitializeAttitude(Eigen::Vector3d& _Acc);
     void EstimateAttitude(IMUType&_RawIMU);
+    double GetIMUDataFreqency(){return imu->freq;}
     IMU *imu;
     struct EstState{
         EstState()
