@@ -14,7 +14,7 @@ DeadReckoning::DeadReckoning(std::string _configFile,IMU *_imu):imu(_imu)
     std::string recordPath = fsSettings["data_path"];
     recordPath = recordPath + "output/reckoning.csv";
     recordFile.open(recordPath);
-    recordFile << "timestamp" << "," << "px" << "," << "py" << "," << "theta" << ","
+    recordFile << "#timestamp" << "," << "px" << "," << "py" << "," << "theta" << ","
                << "odom_px" <<  "," << "odom_py" << "," << "odom_theta" << ","
                << "opt_px"  <<  "," << "opt_py" << "," << "opt_theta" << "," << "flg" << std::endl;
 

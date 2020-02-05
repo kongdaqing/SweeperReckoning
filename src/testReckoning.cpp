@@ -69,8 +69,7 @@ int main(int argc,char **argv)
     {
       lastOptData = optData;
       imu->CalculateGyroBias(imuData);
-    }
-    else {
+    }else {
       anomalyDetector.DetectOdomOptState(imuData,optData,odomData);
       OdometryOptflowType odomOptflowData(imuData.time_s);
 

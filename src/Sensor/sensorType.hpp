@@ -5,9 +5,9 @@
 #include <opencv2/core/eigen.hpp>
 #include <fstream>
 
-#define STEADY_GYRO_MINIRATE 2
+#define STEADY_GYRO_MINIRATE 10
 #define RAD2DEG 57.29578
-#define INITIALCOUNT 1000
+#define INITIALCOUNT 100
 #define G 9.7936
 
 struct OptFlowType
